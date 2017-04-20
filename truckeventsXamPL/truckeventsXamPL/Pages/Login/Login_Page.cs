@@ -40,7 +40,7 @@ namespace truckeventsXamPL.Pages.Login
 
             b_confirmar.Clicked += B_confirmar_Clicked;
 
-            sp_principal = new StackLayout() { Padding = Constantes.PaddingDefault, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, Children = { img_logo, l_email, e_email, l_senha, e_senha, b_confirmar } };
+            sp_principal = new StackLayout() { Padding = Constantes.PADDINGDEFAULT, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, Children = { img_logo, l_email, e_email, l_senha, e_senha, b_confirmar } };
             this.Content = sp_principal;
 
 

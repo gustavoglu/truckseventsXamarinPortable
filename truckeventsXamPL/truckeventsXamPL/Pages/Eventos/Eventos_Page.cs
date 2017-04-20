@@ -41,7 +41,7 @@ namespace truckeventsXamPL.Pages.Eventos
 
             listV_Eventos.ItemTapped += ListV_Eventos_ItemTapped;
 
-            sl_principal = new StackLayout() {Padding = Constantes.PaddingDefault, Children = { listV_Eventos } };
+            sl_principal = new StackLayout() {Padding = Constantes.PADDINGDEFAULT, Children = { listV_Eventos } };
             this.ToolbarItems.Add(toolbar_Produtos);
             this.ToolbarItems.Add(toolbar_Usuarios);
             this.Content = sl_principal;

@@ -10,15 +10,19 @@ namespace truckeventsXamPL.Util
 {
     public class Constantes
     {
-        #region layout
-        public static Thickness PaddingDefault = 20;
+
         public static Token Token;
+
+        #region layout
+        public const int PADDINGDEFAULT = 20;
+        
         #endregion
 
 
         #region WS
 
-        public static string WS_UriLoginToken = "http://truckevents.azurewebsites.net/Token";
+        public const string SERVER = "http://truckevents.azurewebsites.net";
+        public static string WS_URILOGINTOKEN = "http://truckevents.azurewebsites.net/Token";
 
         #endregion
     }

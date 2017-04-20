@@ -18,7 +18,7 @@ namespace truckeventsXamPL.WS
 
             var send = string.Format("grant_type=password&username={0}&password={1}", login.UserName, login.Password);
             var content = new StringContent(send, Encoding.UTF8, "application/text");
-            var result = client.PostAsync(Constantes.WS_UriLoginToken, content).Result;
+            var result = client.PostAsync(Constantes.WS_URILOGINTOKEN, content).Result;
 
             if (result.IsSuccessStatusCode)
             {
