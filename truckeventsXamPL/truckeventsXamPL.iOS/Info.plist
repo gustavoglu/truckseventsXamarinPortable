@@ -46,6 +46,13 @@
       <string>Icon-Small@2x</string>
       <string>Icon-Small@3x</string>
     </array>
+    <key>UIAppFonts</key>
+    <array>
+      <string>iconize-fontawesome.ttf</string>
+      <string>iconize-material.ttf</string>
+      <string>iconize-meteocons.ttf</string>
+      <string>iconize-typicons.ttf</string>
+    </array>
     <key>UILaunchStoryboardName</key>
     <string>LaunchScreen</string>
   </dict>

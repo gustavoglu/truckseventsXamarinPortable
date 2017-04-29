@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using truckeventsXamPL.Pages.Login;
+using truckeventsXamPL.Pages.Registro;
 using Xamarin.Forms;
 
 namespace truckeventsXamPL
@@ -14,7 +15,7 @@ namespace truckeventsXamPL
         public App()
         {
             InitializeComponent();
-            Nav = new NavigationPage(new Login_Page());
+            Nav = new NavigationPage(new RegistroEscolha_Page());
             MainPage = Nav; 
         }
 
