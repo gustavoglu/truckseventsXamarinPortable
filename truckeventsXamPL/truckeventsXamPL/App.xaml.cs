@@ -15,7 +15,7 @@ namespace truckeventsXamPL
         public App()
         {
             InitializeComponent();
-            Nav = new NavigationPage(new Registro_Page());
+            Nav = new NavigationPage(new RegistroEscolha_Page());
             MainPage = Nav; 
         }
 

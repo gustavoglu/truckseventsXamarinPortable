@@ -59,13 +59,13 @@ namespace truckeventsXamPL.Pages.Registro
 
         private void Click_GridLoja_Tapped(object sender, EventArgs e)
         {
-            DisplayAlert("", "Teste Loja", "OK");
+            App.Nav.Navigation.PushAsync(new Registro_Page());
            // throw new NotImplementedException();
         }
 
         private void Click_GridOrganizador_Tapped(object sender, EventArgs e)
         {
-            DisplayAlert("", "Teste Organizador", "OK");
+            App.Nav.Navigation.PushAsync(new Registro_Page());
         }
     }
 }
