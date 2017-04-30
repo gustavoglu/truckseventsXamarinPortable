@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using truckeventsXamPL.ViewModels;
+using truckeventsXamPL.WS;
 using Xamarin.Forms;
 
 namespace truckeventsXamPL.Pages.Registro
@@ -37,10 +39,14 @@ namespace truckeventsXamPL.Pages.Registro
 
         #endregion
 
-        public Registro_Page()
+        UsuarioRegistroViewModel _usuarioRegistroViewModel;
+
+        public Registro_Page(UsuarioRegistroViewModel usuarioRegistroViewModel)
         {
+            this._usuarioRegistroViewModel = usuarioRegistroViewModel;
 
             #region Layout
+
             l_email = new Label() { Text = "E-mail", HorizontalOptions = LayoutOptions.Start };
             l_senha = new Label() { Text = "Senha", HorizontalOptions = LayoutOptions.Start };
             l_confirmacaoSenha = new Label() { Text = "Confirmação da Senha", HorizontalOptions = LayoutOptions.Start };
@@ -98,9 +104,20 @@ namespace truckeventsXamPL.Pages.Registro
 
         }
 
-        private void B_registrar_Clicked(object sender, EventArgs e)
+        private async void B_registrar_Clicked(object sender, EventArgs e)
         {
-            DisplayAlert("", "Clique", "Ok");
+            _usuarioRegistroViewModel.Nome = e_nome.Text;
+            _usuarioRegistroViewModel.Sobrenome = e_sobrenome.Text;
+            _usuarioRegistroViewModel.Documento = e_documento.Text;
+            _usuarioRegistroViewModel.Telefone1 = e_telefone1.Text;
+            _usuarioRegistroViewModel.Telefone2 = e_telefone2.Text;
+            _usuarioRegistroViewModel.Email = e_email.Text;
+            _usuarioRegistroViewModel.Password = e_senha.Text;
+            _usuarioRegistroViewModel.ConfirmPassword = e_confirmacaoSenha.Text;
+
+            var result = await WSOpen.PostRegistroUsuario(_usuarioRegistroViewModel);
+
+            await DisplayAlert("", result == true ? "Certo" : "Errado", "ok");
         }
     }
 }

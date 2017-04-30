@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using truckeventsXamPL.ViewModels;
 using Xamarin.Forms;
 
 namespace truckeventsXamPL.Pages.Registro
@@ -59,13 +60,23 @@ namespace truckeventsXamPL.Pages.Registro
 
         private void Click_GridLoja_Tapped(object sender, EventArgs e)
         {
-            App.Nav.Navigation.PushAsync(new Registro_Page());
-           // throw new NotImplementedException();
+            var usuario = new UsuarioRegistroViewModel()
+            {
+                Organizador = true
+            };
+
+            App.Nav.Navigation.PushAsync(new Registro_Page(usuario));
+         
         }
 
         private void Click_GridOrganizador_Tapped(object sender, EventArgs e)
         {
-            App.Nav.Navigation.PushAsync(new Registro_Page());
+            var usuario = new UsuarioRegistroViewModel()
+            {
+                PrincipalLoja = true
+            };
+
+            App.Nav.Navigation.PushAsync(new Registro_Page(usuario));
         }
     }
 }

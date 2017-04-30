@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using truckeventsXamPL.Models;
 using truckeventsXamPL.Util;
+using truckeventsXamPL.ViewModels;
 
 namespace truckeventsXamPL.WS
 {
@@ -88,7 +89,7 @@ namespace truckeventsXamPL.WS
             {
                 return default(T);
             }
-         
+
         }
 
         public static async Task<T> Put<T>(string uri, T obj)
@@ -137,6 +138,26 @@ namespace truckeventsXamPL.WS
                 return default(T);
             }
 
+        }
+
+        public static async Task<bool> PostRegistroUsuario(UsuarioRegistroViewModel usuarioRegistroViewModel)
+        {
+            HttpClient client = new HttpClient();
+            string uri = Constantes.WS_REGISTRO;
+        
+            StringContent content = new StringContent(JsonConvert.SerializeObject(usuarioRegistroViewModel),Encoding.UTF8,"application/json");
+
+            var result = await client.PostAsync(uri, content);
+            string resultString = await result.Content.ReadAsStringAsync();
+
+            if (result.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

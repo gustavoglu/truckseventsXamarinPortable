@@ -54,6 +54,7 @@
     <Compile Include="Util\Utilidades.cs" />
     <Compile Include="ViewlCells\VCell_Venda_Produto.cs" />
     <Compile Include="ViewModels\ProdutoVendaViewModel.cs" />
+    <Compile Include="ViewModels\UsuarioRegistroViewModel.cs" />
     <Compile Include="WS\WSOpen.cs" />
   </ItemGroup>
   <ItemGroup>

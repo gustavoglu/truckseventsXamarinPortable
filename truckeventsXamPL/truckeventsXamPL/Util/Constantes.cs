@@ -23,8 +23,9 @@ namespace truckeventsXamPL.Util
 
         #region WS
 
-        public const string SERVER = "http://truckevents.azurewebsites.net";
+        public const string WS_SERVER = "http://truckevents.azurewebsites.net";
         public static string WS_URILOGINTOKEN = "http://truckevents.azurewebsites.net/Token";
+        public const string WS_REGISTRO = WS_SERVER + "/api/Account/Register";
 
         #endregion
 
