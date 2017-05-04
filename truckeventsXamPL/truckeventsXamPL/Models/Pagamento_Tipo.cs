@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace truckevents.Domain
+namespace truckeventsXamPL.Models
 {
-    public class Produto_Tipo
+   public class Pagamento_Tipo
     {
         public string Descricao { get; set; } = null;
 
-        public virtual ICollection<Produto> Produtos { get; set; }
+        public virtual ICollection<Venda_Pagamento> Venda_Pagamentos { get; set; }
     }
 }

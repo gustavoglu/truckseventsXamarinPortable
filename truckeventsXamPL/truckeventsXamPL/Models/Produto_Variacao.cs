@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace truckevents.Domain
+namespace truckeventsXamPL.Models
 {
    public class Produto_Variacao : BaseEntity
     {

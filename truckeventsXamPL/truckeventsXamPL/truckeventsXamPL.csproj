@@ -42,9 +42,26 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\BaseEntity.cs" />
+    <Compile Include="Models\Consequencia.cs" />
     <Compile Include="Models\Evento.cs" />
+    <Compile Include="Models\Evento_Usuario.cs" />
+    <Compile Include="Models\Ficha.cs" />
+    <Compile Include="Models\Ficha_Produto.cs" />
     <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\Pagamento_Tipo.cs" />
+    <Compile Include="Models\Produto.cs" />
+    <Compile Include="Models\Produto_Cor.cs" />
+    <Compile Include="Models\Produto_Tipo.cs" />
+    <Compile Include="Models\Produto_Variacao.cs" />
     <Compile Include="Models\Token.cs" />
+    <Compile Include="Models\TokenEnvio.cs" />
+    <Compile Include="Models\Usuario.cs" />
+    <Compile Include="Models\Usuario_Tipo.cs" />
+    <Compile Include="Models\Venda.cs" />
+    <Compile Include="Models\Venda_Pagamento.cs" />
+    <Compile Include="Models\Venda_Produto.cs" />
+    <Compile Include="Models\Venda_Produto_Variacao.cs" />
     <Compile Include="Pages\Eventos\Eventos_Page.cs" />
     <Compile Include="Pages\Login\Login_Page.cs" />
     <Compile Include="Pages\Registro\RegistroEscolha_Page.cs" />

@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace truckevents.Domain
+namespace truckeventsXamPL.Models
 {
-    public class Consequencia : BaseEntity
+    public class Produto_Tipo
     {
         public string Descricao { get; set; } = null;
 
-        public virtual ICollection<Produto_Variacao> Produto_Variacoes { get; set; }
+        public virtual ICollection<Produto> Produtos { get; set; }
     }
 }
