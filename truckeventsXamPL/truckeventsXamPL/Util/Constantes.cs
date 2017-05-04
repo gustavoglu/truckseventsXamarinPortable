@@ -13,7 +13,7 @@ namespace truckeventsXamPL.Util
     public class Constantes
     {
 
-        public static Token Token;
+        public static Token Token { get; set; }
 
         #region layout
         public const int PADDINGDEFAULT = 20;

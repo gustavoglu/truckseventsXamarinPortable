@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using truckeventsXamPL.Models;
 using truckeventsXamPL.Util;
+using truckeventsXamPL.ViewlCells;
+using truckeventsXamPL.WS;
 using Xamarin.Forms;
 
 namespace truckeventsXamPL.Pages.Eventos
@@ -30,6 +32,7 @@ namespace truckeventsXamPL.Pages.Eventos
 
             #region Layout
             listV_Eventos = new ListView();
+            listV_Eventos.ItemTemplate = new DataTemplate(typeof(VCell_Eventos));
             listV_Eventos.ItemsSource = Eventos;
 
 
@@ -46,11 +49,25 @@ namespace truckeventsXamPL.Pages.Eventos
             this.ToolbarItems.Add(toolbar_Usuarios);
             this.Content = sl_principal;
 
+
+            GetEventos();
+
+
         }
 
         private void ListV_Eventos_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             //throw new NotImplementedException();
+        }
+
+
+        private async void GetEventos()
+        {
+            var eventos = await WSOpen.Get<List<Evento>>(Constantes.WS_EVENTOS);
+            if (eventos != null && eventos.Count > 0)
+            {
+                this.listV_Eventos.ItemsSource = eventos;
+            }
         }
     }
 }

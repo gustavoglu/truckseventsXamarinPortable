@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using truckeventsXamPL.Models;
 using Xamarin.Forms;
 
 namespace truckeventsXamPL.ViewModels
@@ -11,15 +12,24 @@ namespace truckeventsXamPL.ViewModels
   public  class ProdutoVendaViewModel : INotifyPropertyChanged
     {
 
+        public Venda_Produto _venda_produto  { get; set; }
 
-        private string descricao;
+        public ProdutoVendaViewModel(Venda_Produto venda_produto)
+        {
+            this._venda_produto = venda_produto;
+        }
+
+        public double? Total
+        {
+            get { return _venda_produto.Total; }
+            set { _venda_produto.Total = value; }
+        }
 
         public string Descricao
         {
-            get { return descricao; }
-            set { descricao = value; Notify(nameof(this.Descricao)); }
+            get { return _venda_produto.Produto.Descricao; }
+            set { _venda_produto.Produto.Descricao = value; Notify(nameof(this.Descricao)); }
         }
-
 
         private Color cor;
 
@@ -29,24 +39,17 @@ namespace truckeventsXamPL.ViewModels
             set { cor = value; Notify(nameof(this.Cor)); }
         }
 
-
-        private int quantidade;
-
-        public int Quantidade
+        public int? Quantidade
         {
-            get { return quantidade; }
-            set { quantidade = value; Notify(nameof(this.Quantidade)); }
+            get { return _venda_produto.Quantidade; }
+            set { _venda_produto.Quantidade = value; Notify(nameof(this.Quantidade)); }
         }
 
-        private double valor;
-
-        public double Valor
+        public double? Valor
         {
-            get { return valor; }
-            set { valor = value; Notify(nameof(this.Valor)); }
+            get { return _venda_produto.Produto.Valor; }
+            set { _venda_produto.Produto.Valor = value; Notify(nameof(this.Valor)); }
         }
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

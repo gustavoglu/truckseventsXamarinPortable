@@ -8,12 +8,12 @@ namespace truckeventsXamPL.Models
 {
     public class Token
     {
-        public string access_token { get; set; }
-        public string userName { get; set; }
-        public DateTime expires { get; set; }
-        public bool Admin { get; set; }
-        public bool Organizador { get; set; }
-        public bool UsuarioPrincipal { get; set; }
-        public string id_usuario_principal { get; set; }
+        public string access_token { get; set; } = null;
+        public string userName { get; set; } = null;
+        public DateTime? expires { get; set; }
+        public bool? Admin { get; set; }
+        public bool? Organizador { get; set; }
+        public bool? UsuarioPrincipal { get; set; }
+        public string id_usuario_principal { get; set; } = null;
     }
 }

@@ -44,6 +44,7 @@ namespace truckeventsXamPL.WS
         public static async Task<T> Get<T>(string uri)
         {
             HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Constantes.Token.access_token);
 
             var result = client.GetAsync(uri).Result;
 
@@ -70,6 +71,7 @@ namespace truckeventsXamPL.WS
         public static async Task<T> Post<T>(string uri, T obj)
         {
             HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Constantes.Token.access_token);
 
             var objSer = JsonConvert.SerializeObject(obj);
 
@@ -95,7 +97,7 @@ namespace truckeventsXamPL.WS
         public static async Task<T> Put<T>(string uri, T obj)
         {
             HttpClient client = new HttpClient();
-
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Constantes.Token.access_token);
             var objSer = JsonConvert.SerializeObject(obj);
 
             StringContent content = new StringContent(objSer, Encoding.UTF8, "application/json");
@@ -119,9 +121,11 @@ namespace truckeventsXamPL.WS
 
         public static async Task<T> Delete<T>(string uri, string id)
         {
+
             string uriDelete = uri + "/" + id;
 
             HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Constantes.Token.access_token);
 
             var result = await client.DeleteAsync(uriDelete);
 
