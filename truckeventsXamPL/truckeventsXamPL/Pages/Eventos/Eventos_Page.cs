@@ -57,7 +57,11 @@ namespace truckeventsXamPL.Pages.Eventos
 
         private void ListV_Eventos_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            //throw new NotImplementedException();
+            var evento = e.Item as Evento;
+            if (evento != null)
+            {
+                App.Nav.PushAsync(new Evento_Vendas_Page(evento));
+            }
         }
 
 

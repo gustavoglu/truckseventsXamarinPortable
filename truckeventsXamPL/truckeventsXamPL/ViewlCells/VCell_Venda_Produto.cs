@@ -9,53 +9,89 @@ using Xamarin.Forms;
 
 namespace truckeventsXamPL.ViewlCells
 {
-   public class VCell_Venda_Produto : ViewCell
+    public class VCell_Venda_Produto : ViewCell
     {
         StackLayout sl_principal;
+        StackLayout sl_lado_hori_A;
+        StackLayout sl_lado_ver_A;
+        StackLayout sl_lado_ver_B;
+        StackLayout sl_lado_B;
         BoxView box_corProduto;
         Label l_nomeProduto;
         Label l_valor;
         Label l_totalValor;
         Label l_quantidade;
         Stepper st_quantidade;
+        TapGestureRecognizer clickBackground;
 
         public delegate void AdicionaQuantidade(object sender, AlteraQuantidadeProdutoArgs e);
-        public event AdicionaQuantidade AdicionaQuantidadeHandler;
+        public static event AdicionaQuantidade AdicionaQuantidadeHandler;
         public delegate void DiminuiQuantidade(object sender, AlteraQuantidadeProdutoArgs e);
-        public event DiminuiQuantidade DiminuiQuantidadeHandler;
+        public static event DiminuiQuantidade DiminuiQuantidadeHandler;
+
 
         public VCell_Venda_Produto()
         {
             box_corProduto = new BoxView() { };
-            l_nomeProduto = new Label() { };
-            l_valor = new Label() { };
-            l_totalValor = new Label() { };
-            l_quantidade = new Label() { };
-            st_quantidade = new Stepper() { HorizontalOptions = LayoutOptions.End };
+            l_nomeProduto = new Label() { VerticalTextAlignment = TextAlignment.Center };
+            l_valor = new Label() { VerticalTextAlignment = TextAlignment.Center };
+            l_totalValor = new Label() { VerticalTextAlignment = TextAlignment.Center , HorizontalOptions = LayoutOptions.End };
+            l_quantidade = new Label() { VerticalTextAlignment = TextAlignment.Center, HorizontalOptions = LayoutOptions.End};
+            st_quantidade = new Stepper() {  HorizontalOptions = LayoutOptions.EndAndExpand };
 
-            box_corProduto.SetBinding(BoxView.ColorProperty, "Cor");
+            clickBackground = new TapGestureRecognizer();
+            clickBackground.Tapped += ClickBackground_Tapped;
+
+            box_corProduto.SetBinding(BoxView.ColorProperty, "CorProduto");
             l_nomeProduto.SetBinding(Label.TextProperty, "Descricao");
-            l_valor.SetBinding(Label.TextProperty, "Valor");
-            l_totalValor.SetBinding(Label.TextProperty, "TotalValor");
-            l_quantidade.SetBinding(Label.TextProperty, "Quantidade");
-
+            l_valor.SetBinding(Label.TextProperty, "Valor", stringFormat: "R${0}");
+            l_totalValor.SetBinding(Label.TextProperty, "Total", stringFormat: "Total R${0}");
+            l_quantidade.SetBinding(Label.TextProperty, "Quantidade", stringFormat: "Qtd {0}");
+            st_quantidade.SetBinding(Stepper.ValueProperty, "Quantidade");
 
             st_quantidade.ValueChanged += St_quantidade_ValueChanged;
 
-            sl_principal = new StackLayout() { Orientation = StackOrientation.Horizontal, Children = { box_corProduto, l_nomeProduto, l_totalValor, l_quantidade, st_quantidade } };
+
+
+            sl_lado_hori_A = new StackLayout() { Orientation = StackOrientation.Horizontal, Children = { box_corProduto, l_nomeProduto, l_valor } };
+
+            sl_principal = new StackLayout()
+            {
+                Orientation = StackOrientation.Horizontal,
+                Children =
+                {
+                  sl_lado_hori_A,
+                  l_quantidade,
+                  st_quantidade
+                }
+            };
+
+            sl_principal.SetBinding(StackLayout.BackgroundColorProperty, "CorBackground");
+            sl_lado_hori_A.GestureRecognizers.Add(clickBackground);
 
             this.View = sl_principal;
+
+
+        }
+
+        private void ClickBackground_Tapped(object sender, EventArgs e)
+        {
+            var produtoviewmodel = returnViewModel();
+            produtoviewmodel.Quantidade++;
+            AdicionaQuantidadeHandler?.Invoke(this, new AlteraQuantidadeProdutoArgs() { ProdutoVendaViewModel = produtoviewmodel });
         }
 
         private void St_quantidade_ValueChanged(object sender, ValueChangedEventArgs e)
         {
-            if (e.NewValue > int.Parse(l_quantidade.Text))
+            var produtoviewmodel = returnViewModel();
+
+            if (e.NewValue > e.OldValue)
             {
-                AdicionaQuantidadeHandler(this, new AlteraQuantidadeProdutoArgs() { ProdutoVendaViewModel = returnViewModel() });
+                AdicionaQuantidadeHandler?.Invoke(this, new AlteraQuantidadeProdutoArgs() { ProdutoVendaViewModel = produtoviewmodel });
             }
-            else if (e.NewValue < int.Parse(l_quantidade.Text))
+            else if (e.NewValue < e.OldValue)
             {
-                DiminuiQuantidadeHandler(this, new AlteraQuantidadeProdutoArgs() { ProdutoVendaViewModel = returnViewModel() });
+                DiminuiQuantidadeHandler?.Invoke(this, new AlteraQuantidadeProdutoArgs() { ProdutoVendaViewModel = produtoviewmodel });
             }
         }
 

@@ -5,50 +5,69 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using truckeventsXamPL.Models;
+using truckeventsXamPL.Util;
 using Xamarin.Forms;
 
 namespace truckeventsXamPL.ViewModels
 {
-  public  class ProdutoVendaViewModel : INotifyPropertyChanged
+    public class ProdutoVendaViewModel : INotifyPropertyChanged
     {
 
-        public Venda_Produto _venda_produto  { get; set; }
+        private Produto _produto { get; set; }
 
-        public ProdutoVendaViewModel(Venda_Produto venda_produto)
+        public ProdutoVendaViewModel(Produto produto)
         {
-            this._venda_produto = venda_produto;
+            this._produto = produto;
         }
 
-        public double? Total
+        public Guid Id_produto { get { return _produto.Id.Value; } }
+
+        private double total;
+
+        public double Total
         {
-            get { return _venda_produto.Total; }
-            set { _venda_produto.Total = value; }
+            get { return Quantidade * Valor.Value; }
+            set { total = value; this.Notify(nameof(Total)); }
         }
 
         public string Descricao
         {
-            get { return _venda_produto.Produto.Descricao; }
-            set { _venda_produto.Produto.Descricao = value; Notify(nameof(this.Descricao)); }
+            get { return _produto.Descricao; }
+            set { _produto.Descricao = value; Notify(nameof(this.Descricao)); }
         }
 
-        private Color cor;
-
-        public Color Cor
+        public Color CorProduto
         {
-            get { return cor; }
-            set { cor = value; Notify(nameof(this.Cor)); }
+            get { return Color.FromHex(_produto.Produto_Cor.Cor); }
         }
 
-        public int? Quantidade
+        private Color corBackground;
+
+        public Color CorBackground
         {
-            get { return _venda_produto.Quantidade; }
-            set { _venda_produto.Quantidade = value; Notify(nameof(this.Quantidade)); }
+            get { return quantidade > 0 ? Constantes.VERDESELECAO : Color.Transparent; }
+            set { corBackground = value; this.Notify(nameof(CorBackground)); }
         }
+
+        private int quantidade;
+
+        public int Quantidade
+        {
+            get { return quantidade; }
+            set
+            {
+                quantidade = value;
+                Notify(nameof(this.Quantidade));
+                Notify(nameof(this.Total));
+                Notify(nameof(this.CorBackground));
+            }
+        }
+
+        private double valor;
 
         public double? Valor
         {
-            get { return _venda_produto.Produto.Valor; }
-            set { _venda_produto.Produto.Valor = value; Notify(nameof(this.Valor)); }
+            get { return _produto.Valor; }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

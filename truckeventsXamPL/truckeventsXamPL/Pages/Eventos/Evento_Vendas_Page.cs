@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using truckeventsXamPL.Models;
+using truckeventsXamPL.Pages.Vendas;
 using truckeventsXamPL.Util;
 using Xamarin.Forms;
 
@@ -33,11 +34,26 @@ namespace truckeventsXamPL.Pages.Eventos
             this.ToolbarItems.Add(toolbar_novaVenda);
             this.Content = sl_principal;
 
+
+
+            populaVendas();
+
         }
 
         private void NovaVenda()
         {
+            App.Nav.Navigation.PushAsync(new Nova_Venda_Page(new Venda() { Id_evento = _evento.Id }));
+        }
 
+        private void populaVendas()
+        {
+            if (_evento.Vendas != null && _evento.Vendas.Count > 0)
+            {
+                foreach (var venda in _evento.Vendas)
+                {
+                    Vendas.Add(venda);
+                }
+            }
         }
     }
 }

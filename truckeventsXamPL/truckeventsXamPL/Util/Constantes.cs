@@ -17,6 +17,8 @@ namespace truckeventsXamPL.Util
 
         #region layout
         public const int PADDINGDEFAULT = 20;
+
+        public static Color VERDESELECAO = Color.FromHex("#c9ff46");
         
         #endregion
 
