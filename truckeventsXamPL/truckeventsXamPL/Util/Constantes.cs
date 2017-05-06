@@ -25,8 +25,8 @@ namespace truckeventsXamPL.Util
 
         #region WS
 
-        public const string WS_SERVER = "http://truckevents.azurewebsites.net";
-        public static string WS_URILOGINTOKEN = "http://truckevents.azurewebsites.net/Token";
+        public const string WS_SERVER = "http://localhost:50262";
+        public static string WS_URILOGINTOKEN = WS_SERVER + "/Token";
         public const string WS_REGISTRO = WS_SERVER + "/api/Account/Register";
         public const string WS_PRODUTOS = WS_SERVER + "/api/produtos";
         public const string WS_EVENTOS = WS_SERVER + "/api/eventos";
@@ -40,6 +40,12 @@ namespace truckeventsXamPL.Util
         public static IconLabel ICON_LOJA = new IconLabel() {Text = "users", ClassId = "users" };
 
 
+        #endregion
+
+
+        #region Erro Mensagens
+
+        public const string ERRO_VENDASEMPRODUTOS = "É Necessário adicionar algum produto a venda, favor verificar sua venda";
         #endregion
     }
 }

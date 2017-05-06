@@ -42,7 +42,7 @@ namespace truckeventsXamPL.Pages.Eventos
 
         private void NovaVenda()
         {
-            App.Nav.Navigation.PushAsync(new Nova_Venda_Page(new Venda() { Id_evento = _evento.Id }));
+            App.Nav.Navigation.PushAsync(new Nova_Venda_Page(new Venda() { Id_evento = _evento.Id }, _evento));
         }
 
         private void populaVendas()

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace truckeventsXamPL.Models
 {
-    public class Produto_Tipo
+    public class Produto_Tipo : BaseEntity
     {
         public string Descricao { get; set; } = null;
 

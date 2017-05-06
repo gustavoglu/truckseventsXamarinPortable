@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace truckeventsXamPL.Models
 {
-    public class TokenEnvio
+    public class TokenEnvio : BaseEntity
     {
         public string Token { get; set; }
 

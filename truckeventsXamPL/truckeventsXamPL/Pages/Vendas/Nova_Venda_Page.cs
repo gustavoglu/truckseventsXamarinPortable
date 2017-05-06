@@ -26,16 +26,17 @@ namespace truckeventsXamPL.Pages.Vendas
         ToolbarItem toolbar_cancelar;
 
         Venda _venda;
-
-        public Nova_Venda_Page(Venda venda)
+        Evento _evento;
+        public Nova_Venda_Page(Venda venda,Evento evento)
         {
             this._venda = venda;
+            this._evento = evento;
 
             VCell_Venda_Produto.AdicionaQuantidadeHandler += VCell_Venda_Produto_AdicionaQuantidadeHandler;
             VCell_Venda_Produto.DiminuiQuantidadeHandler += VCell_Venda_Produto_DiminuiQuantidadeHandler;
 
             ProdutosVendaViewModel = new ObservableCollection<ProdutoVendaViewModel>();
-            l_total = new Label() { HorizontalOptions = LayoutOptions.End };
+            l_total = new Label() {Text = "0", HorizontalOptions = LayoutOptions.End };
             l_total_h = new Label() { Text = "Total", HorizontalOptions = LayoutOptions.End };
           
             listV_produtos = new ListView();
@@ -64,30 +65,55 @@ namespace truckeventsXamPL.Pages.Vendas
             populaProdutos();
         }
 
-        private void Cancelar()
+        private async void Cancelar()
         {
+            var resultado = await Utilidades.DialogReturn("Deseja cancelar esta venda?");
+            if (resultado)
+            {
+                Utilidades.removeDaStackPaginaAtualNavigation(App.Nav);
+            }
 
         }
 
         private void Finalizar()
         {
             double totalvenda = double.Parse(l_total.Text);
+            _venda.TotalVenda = totalvenda;
+
             var produtosEscolhidos = ProdutosVendaViewModel.Where(vm => vm.Quantidade > 0);
+
             List<Venda_Produto> venda_produtos = new List<Venda_Produto>();
+
             foreach (var produtovendaviewmodel in produtosEscolhidos)
             {
-                venda_produtos.Add(new Venda_Produto() {Id_Venda = _venda.Id ,Id_produto = produtovendaviewmodel.Id_produto });
+                venda_produtos.Add(new Venda_Produto() {Id_Venda = _venda.Id ,Id_produto = produtovendaviewmodel.Id_produto, Quantidade = produtovendaviewmodel.Quantidade,Total = produtovendaviewmodel.Total });
             }
 
-            _venda.Venda_Produtos = venda_produtos;
-
-            App.Nav.Navigation.PushModalAsync(new Resumo_Venda_Page(_venda));
+            //if (ValidacaoFinalizacaoVenda(_venda))
+            //{
+                _venda.Venda_Produtos = venda_produtos;
+                App.Nav.Navigation.PushAsync(new Resumo_Venda_Page(_venda,_evento));
+            //}
+            //else
+            //{
+            //    Utilidades.DialogMessage(Constantes.ERRO_VENDASEMPRODUTOS);
+            //}
+           
 
         }
 
-        private async void ValidacaoFinalizacao()
+        private  bool ValidacaoFinalizacaoVenda(Venda venda)
         {
-
+            var totalVenda = venda.TotalVenda;
+            var countVenda_Produtos = venda.Venda_Produtos == null ? 0 : venda.Venda_Produtos.Count;
+            if (totalVenda > 0 && countVenda_Produtos > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private void ListV_produtos_ItemTapped(object sender, ItemTappedEventArgs e)
