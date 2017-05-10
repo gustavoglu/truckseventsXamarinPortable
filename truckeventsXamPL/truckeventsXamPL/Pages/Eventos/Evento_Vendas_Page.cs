@@ -19,7 +19,7 @@ namespace truckeventsXamPL.Pages.Eventos
         ListView listV_VendasEvento;
         ToolbarItem toolbar_novaVenda;
 
-        ObservableCollection<Venda> Vendas;
+        ObservableCollection<Venda> Vendas; 
         Evento _evento;
 
         public Evento_Vendas_Page(Evento evento)

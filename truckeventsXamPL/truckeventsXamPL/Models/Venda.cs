@@ -8,6 +8,11 @@ namespace truckeventsXamPL.Models
 {
     public class Venda : BaseEntity
     {
+        public Venda()
+        {
+            Venda_Pagamentos = new List<Venda_Pagamento>();
+            Venda_Produtos = new List<Venda_Produto>();
+        }
         public DateTime? Data { get; set; }
 
         public double? TotalVenda { get; set; }

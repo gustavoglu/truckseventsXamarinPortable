@@ -60,6 +60,7 @@
     <Compile Include="Models\Usuario_Tipo.cs" />
     <Compile Include="Models\Venda.cs" />
     <Compile Include="Models\Venda_Pagamento.cs" />
+    <Compile Include="Models\Venda_Pagamento_Ficha.cs" />
     <Compile Include="Models\Venda_Produto.cs" />
     <Compile Include="Models\Venda_Produto_Variacao.cs" />
     <Compile Include="Pages\Eventos\Eventos_Page.cs" />

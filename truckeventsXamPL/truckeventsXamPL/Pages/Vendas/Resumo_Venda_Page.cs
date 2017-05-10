@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,8 @@ namespace truckeventsXamPL.Pages.Vendas
         StackLayout sl_hori_2;
         StackLayout sl_hori_3;
         ListView listV_produtosEscolhidos;
+        ListView listV_venda_pagamento_fichas;
+        ObservableCollection<Ficha> Fichas;
         Label l_codigoFicha;
         Label l_totalVenda;
         Label l_totalVenda_h;
@@ -28,17 +31,20 @@ namespace truckeventsXamPL.Pages.Vendas
         Entry e_nomeCliente;
         Entry e_codigoFicha;
         Entry e_troco;
+        Button b_adicionarFicha;
 
         ToolbarItem toolbar_confirmar;
         ToolbarItem toolbar_cancelar;
 
         Venda _venda;
         Evento _evento;
+        Venda_Pagamento _venda_pagamento;
 
-        public Resumo_Venda_Page(Venda venda,Evento _evento)
+        public Resumo_Venda_Page(Venda venda, Evento _evento)
         {
             this._venda = venda;
             this._evento = _evento;
+            this._venda_pagamento = new Venda_Pagamento();
 
             l_totalVenda_h = new Label() { Text = "Total Venda: " };
             l_totalVenda = new Label() { Text = string.Format("R$ {0}", venda.TotalVenda) };
@@ -49,6 +55,11 @@ namespace truckeventsXamPL.Pages.Vendas
             e_nomeCliente = new Entry() { Placeholder = "ex: Pedro", HorizontalOptions = LayoutOptions.CenterAndExpand };
             l_codigoFicha = new Label() { Text = "Cód. Ficha Pagamento: " };
             e_codigoFicha = new Entry() { Placeholder = "00000", Keyboard = Keyboard.Numeric };
+            b_adicionarFicha = new Button() { Text = "Adicionar" };
+            Fichas = new ObservableCollection<Ficha>();
+
+            listV_venda_pagamento_fichas = new ListView();
+            listV_venda_pagamento_fichas.ItemsSource = Fichas;
 
             listV_produtosEscolhidos = new ListView();
             listV_produtosEscolhidos.ItemTemplate = new DataTemplate(typeof(VCell_Resumo_Venda));
@@ -57,17 +68,33 @@ namespace truckeventsXamPL.Pages.Vendas
             toolbar_confirmar = new ToolbarItem("Confirmar", "", Confirmar, ToolbarItemOrder.Default);
             toolbar_cancelar = new ToolbarItem("Cancelar", "", Cancelar, ToolbarItemOrder.Default);
 
-            sl_hori_1 = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = { l_codigoFicha, e_codigoFicha } };
+            sl_hori_1 = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = { l_codigoFicha, e_codigoFicha, b_adicionarFicha } };
             sl_hori_2 = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = { l_totalVenda_h, l_totalVenda } };
-            sl_hori_3 = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = {l_troco,e_troco,l_trocoResultado } };
-            sl_principal = new StackLayout() { Padding = Constantes.PADDINGDEFAULT, Children = { sl_hori_2, listV_produtosEscolhidos,sl_hori_3, sl_hori_1 } };
+            sl_hori_3 = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = { l_troco, e_troco, l_trocoResultado } };
+            sl_principal = new StackLayout() { Padding = Constantes.PADDINGDEFAULT, Children = { sl_hori_2, listV_produtosEscolhidos, sl_hori_3, sl_hori_1, listV_venda_pagamento_fichas } };
 
             this.ToolbarItems.Add(toolbar_cancelar);
             this.ToolbarItems.Add(toolbar_confirmar);
             this.Content = sl_principal;
 
+            b_adicionarFicha.Clicked += B_adicionarFicha_Clicked;
 
-            e_codigoFicha.Focus();
+
+        }
+
+        private async void B_adicionarFicha_Clicked(object sender, EventArgs e)
+        {
+            string codigoFicha = e_codigoFicha.Text;
+            ValidaCampoFicha(codigoFicha);
+
+            Ficha ficha = null;
+            ficha = await getFicha(codigoFicha);
+
+            if (ficha != null)
+            {
+                Fichas.Add(ficha);
+            }
+
         }
 
         private void Cancelar()
@@ -77,12 +104,88 @@ namespace truckeventsXamPL.Pages.Vendas
 
         private async void Confirmar()
         {
-            var result = await WSOpen.Post(Constantes.WS_VENDAS, _venda);
-            if (result != null)
+
+            AdicionaVenda_Pagamento_Fichas(_venda);
+
+            var validacao = await ValidaVenda();
+            if (validacao)
             {
-                Utilidades.DialogMessage("Venda Realizada");
-                await App.Nav.PushAsync(new Evento_Vendas_Page(_evento));
+                var result = await WSOpen.Post(Constantes.WS_VENDAS, _venda);
+                if (result != null)
+                {
+                    Utilidades.DialogMessage("Venda Realizada");
+                    await App.Nav.PushAsync(new Evento_Vendas_Page(_evento));
+                }
+
             }
+        }
+
+        private async Task<Ficha> getFicha(string codigo)
+        {
+            var ficha = await WSOpen.Get<Ficha>(string.Format("{0}?id_evento={1}&codigo={2}",Constantes.WS_FICHAS , _evento.Id,codigo));
+
+            if (ficha == null)
+            {
+               Utilidades.DialogMessage("Esta ficha não existe");
+            }
+
+            if (!(ficha.Saldo > 0))
+            {
+                Utilidades.DialogMessage("Esta ficha não tem saldo");
+            }
+
+            return ficha ?? null;
+
+        }
+
+        private void ValidaCampoFicha(string textCampoFicha)
+        {
+            if (textCampoFicha == null)
+            {
+                Utilidades.DialogMessage("Campo do código da ficha vázio");
+            }
+            if (textCampoFicha == "")
+            {
+                Utilidades.DialogMessage("Campo do código da ficha vázio");
+            }
+
+        }
+
+        private async Task<bool> ValidaVenda()
+        {
+            double valorTotalVenda = _venda.TotalVenda.Value;
+            double valorTotalFichas = 0;
+            var countFichas = Fichas.Count;
+
+            if (!(countFichas > 0))
+            {
+                Utilidades.DialogMessage("Nenhuma Ficha informada como pagamento");
+                return false;
+            }
+            else
+            {
+                valorTotalFichas = Fichas.Sum(f => f.Saldo).Value;
+                if (valorTotalFichas < valorTotalVenda)
+                {
+                    Utilidades.DialogMessage(string.Format("Não existe saldo o suficiente na(s) Ficha(s) Informada(s) para esta Venda, \n Saldo Total Fichas: {0} \n Valor Total Venda: {1}",valorTotalFichas,valorTotalVenda));
+                    return false;
+                }
+
+                return true;
+            }
+
+        }
+
+        private void AdicionaVenda_Pagamento_Fichas(Venda venda)
+        {
+            _venda_pagamento = new Venda_Pagamento();
+
+            foreach (var ficha in Fichas)
+            {
+                _venda_pagamento.Venda_Pagamento_Fichas.Add(new Venda_Pagamento_Ficha() { Id_Ficha = ficha.Id });
+            }
+
+            venda.Venda_Pagamentos.Add(this._venda_pagamento);
         }
     }
 }
