@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using truckeventsXamPL.Models;
 using truckeventsXamPL.Pages.Vendas;
 using truckeventsXamPL.Util;
+using truckeventsXamPL.WS;
 using Xamarin.Forms;
 
 namespace truckeventsXamPL.Pages.Eventos
@@ -36,7 +37,7 @@ namespace truckeventsXamPL.Pages.Eventos
 
 
 
-            populaVendas();
+            getVendas();
 
         }
 
@@ -54,6 +55,20 @@ namespace truckeventsXamPL.Pages.Eventos
                     Vendas.Add(venda);
                 }
             }
+        }
+
+        private async void getVendas()
+        {
+            string uri = string.Format("{0}/{1}", Constantes.WS_VENDAS_EVENTO, _evento.Id);
+            var vendas = await WSOpen.Get<List<Venda>>(uri);
+            if (vendas != null && vendas.Count > 0)
+            {
+                foreach (var venda in _evento.Vendas)
+                {
+                    Vendas.Add(venda);
+                }
+            }
+
         }
     }
 }
