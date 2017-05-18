@@ -74,6 +74,7 @@
     <Compile Include="Util\Constantes.cs" />
     <Compile Include="Util\Utilidades.cs" />
     <Compile Include="ViewlCells\VCell_Eventos.cs" />
+    <Compile Include="ViewlCells\VCell_Fichas.cs" />
     <Compile Include="ViewlCells\VCell_Resumo_Venda.cs" />
     <Compile Include="ViewlCells\VCell_Venda_Produto.cs" />
     <Compile Include="ViewModels\ProdutoVendaViewModel.cs" />

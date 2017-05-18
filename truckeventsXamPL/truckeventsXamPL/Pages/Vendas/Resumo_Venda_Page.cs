@@ -53,12 +53,14 @@ namespace truckeventsXamPL.Pages.Vendas
             l_trocoResultado = new Label() { Text = "0" };
             l_nomeCliente = new Label() { Text = "Nome Cliente:", HorizontalOptions = LayoutOptions.CenterAndExpand };
             e_nomeCliente = new Entry() { Placeholder = "ex: Pedro", HorizontalOptions = LayoutOptions.CenterAndExpand };
-            l_codigoFicha = new Label() { Text = "Cód. Ficha Pagamento: " };
+            l_codigoFicha = new Label() { Text = "Cód. Ficha Pagamento: ", HorizontalTextAlignment = TextAlignment.Center };
             e_codigoFicha = new Entry() { Placeholder = "00000", Keyboard = Keyboard.Numeric };
             b_adicionarFicha = new Button() { Text = "Adicionar" };
+
             Fichas = new ObservableCollection<Ficha>();
 
             listV_venda_pagamento_fichas = new ListView();
+            listV_venda_pagamento_fichas.ItemTemplate = new DataTemplate(typeof(VCell_Fichas));
             listV_venda_pagamento_fichas.ItemsSource = Fichas;
 
             listV_produtosEscolhidos = new ListView();
@@ -71,7 +73,8 @@ namespace truckeventsXamPL.Pages.Vendas
             sl_hori_1 = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = { l_codigoFicha, e_codigoFicha, b_adicionarFicha } };
             sl_hori_2 = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = { l_totalVenda_h, l_totalVenda } };
             sl_hori_3 = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = { l_troco, e_troco, l_trocoResultado } };
-            sl_principal = new StackLayout() { Padding = Constantes.PADDINGDEFAULT, Children = { sl_hori_2, listV_produtosEscolhidos, sl_hori_3, sl_hori_1, listV_venda_pagamento_fichas } };
+
+            sl_principal = new StackLayout() { Padding = Constantes.PADDINGDEFAULT, Children = { sl_hori_2, listV_produtosEscolhidos, sl_hori_1, listV_venda_pagamento_fichas } };
 
             this.ToolbarItems.Add(toolbar_cancelar);
             this.ToolbarItems.Add(toolbar_confirmar);
@@ -92,7 +95,14 @@ namespace truckeventsXamPL.Pages.Vendas
 
             if (ficha != null)
             {
-                Fichas.Add(ficha);
+                if (Fichas.ToList().Exists(f => f.Codigo == ficha.Codigo))
+                {
+                    Utilidades.DialogMessage("Esta Ficha ja foi adicionada a lista de pagamentos! ");
+                }
+                else
+                {
+                    Fichas.Add(ficha);
+                }
             }
 
         }
@@ -122,11 +132,11 @@ namespace truckeventsXamPL.Pages.Vendas
 
         private async Task<Ficha> getFicha(string codigo)
         {
-            var ficha = await WSOpen.Get<Ficha>(string.Format("{0}?id_evento={1}&codigo={2}",Constantes.WS_FICHAS , _evento.Id,codigo));
+            var ficha = await WSOpen.Get<Ficha>(string.Format("{0}?id_evento={1}&codigo={2}", Constantes.WS_FICHAS, _evento.Id, codigo));
 
             if (ficha == null)
             {
-               Utilidades.DialogMessage("Esta ficha não existe");
+                Utilidades.DialogMessage("Esta ficha não existe");
             }
 
             if (!(ficha.Saldo > 0))
@@ -167,7 +177,7 @@ namespace truckeventsXamPL.Pages.Vendas
                 valorTotalFichas = Fichas.Sum(f => f.Saldo).Value;
                 if (valorTotalFichas < valorTotalVenda)
                 {
-                    Utilidades.DialogMessage(string.Format("Não existe saldo o suficiente na(s) Ficha(s) Informada(s) para esta Venda, \n Saldo Total Fichas: {0} \n Valor Total Venda: {1}",valorTotalFichas,valorTotalVenda));
+                    Utilidades.DialogMessage(string.Format("Não existe saldo o suficiente na(s) Ficha(s) Informada(s) para esta Venda, \n Saldo Total Fichas: {0} \n Valor Total Venda: {1}", valorTotalFichas, valorTotalVenda));
                     return false;
                 }
 

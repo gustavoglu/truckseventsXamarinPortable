@@ -15,16 +15,16 @@ namespace truckeventsXamPL.Droid
     {
         protected override void OnCreate(Bundle bundle)
         {
-            TabLayoutResource = Resource.Layout.Tabbar;
-            ToolbarResource = Resource.Layout.Toolbar;
+            //TabLayoutResource = Resource.Layout.Tabbar;
+            //ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(bundle);
 
-            Plugin.Iconize.Iconize.With((new Plugin.Iconize.Fonts.FontAwesomeModule()));
+            //Plugin.Iconize.Iconize.With((new Plugin.Iconize.Fonts.FontAwesomeModule()));
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
 
-            FormsPlugin.Iconize.Droid.IconControls.Init(Resource.Id.toolbar);//, Resource.Id.tabs);
+            //FormsPlugin.Iconize.Droid.IconControls.Init(Resource.Id.toolbar);//, Resource.Id.tabs);
 
             LoadApplication(new App());
         }

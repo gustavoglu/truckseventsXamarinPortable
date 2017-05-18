@@ -28,8 +28,8 @@ namespace truckeventsXamPL.Pages.Login
             NavigationPage.SetHasNavigationBar(this, false);
 
             img_logo = new Image { VerticalOptions = LayoutOptions.CenterAndExpand, HorizontalOptions = LayoutOptions.CenterAndExpand };
-            e_email = new Entry { Text = "loja@hotmail.com", WidthRequest= 200 , Placeholder = "E-mail", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center };
-            e_senha = new Entry { Text = "loja123", Placeholder = "Senha",  WidthRequest = 200, IsPassword = true, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center };
+            e_email = new Entry { Text = "loja@hotmail.com", WidthRequest = 200, Placeholder = "E-mail", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center };
+            e_senha = new Entry { Text = "loja123", Placeholder = "Senha", WidthRequest = 200, IsPassword = true, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center };
             l_email = new Label { Text = "E-mail", WidthRequest = 200, HorizontalTextAlignment = TextAlignment.Start, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center };
             l_senha = new Label { Text = "Senha", WidthRequest = 200, HorizontalTextAlignment = TextAlignment.Start, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center };
             b_confirmar = new Button { Text = "Login", WidthRequest = 200, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center };
@@ -53,7 +53,7 @@ namespace truckeventsXamPL.Pages.Login
             if (token != null)
             {
                 Constantes.Token = token;
-               await App.Nav.Navigation.PushAsync(new Eventos_Page());
+                await App.Nav.Navigation.PushAsync(new Eventos_Page());
 
             }
             else
