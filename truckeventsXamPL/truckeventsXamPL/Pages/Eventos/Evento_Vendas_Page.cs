@@ -61,9 +61,10 @@ namespace truckeventsXamPL.Pages.Eventos
         {
             string uri = string.Format("{0}/{1}", Constantes.WS_VENDAS_EVENTO, _evento.Id);
             var vendas = await WSOpen.Get<List<Venda>>(uri);
+
             if (vendas != null && vendas.Count > 0)
             {
-                foreach (var venda in _evento.Vendas)
+                foreach (var venda in vendas)
                 {
                     Vendas.Add(venda);
                 }
