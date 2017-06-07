@@ -68,7 +68,8 @@ namespace truckeventsXamPL.Pages.Vendas
 
             listV_produtosEscolhidos = new ListView();
             listV_produtosEscolhidos.ItemTemplate = new DataTemplate(typeof(VCell_Resumo_Venda));
-            listV_produtosEscolhidos.ItemsSource = _venda.Venda_Produtos;
+            listV_produtosEscolhidos.ItemsSource = from venda_produto in _venda.Venda_Produtos
+                                                   select new { Descricao = venda_produto.Produto.Descricao, Quantidade = venda_produto.Quantidade, Total = venda_produto.Total } ;
 
             toolbar_confirmar = new ToolbarItem("Confirmar", "", Confirmar, ToolbarItemOrder.Default);
             toolbar_cancelar = new ToolbarItem("Cancelar", "", Cancelar, ToolbarItemOrder.Default);

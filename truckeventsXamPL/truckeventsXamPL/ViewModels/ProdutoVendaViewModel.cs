@@ -13,7 +13,7 @@ namespace truckeventsXamPL.ViewModels
     public class ProdutoVendaViewModel : INotifyPropertyChanged
     {
 
-        private Produto _produto { get; set; }
+        public Produto _produto { get; set; }
 
         public ProdutoVendaViewModel(Produto produto)
         {

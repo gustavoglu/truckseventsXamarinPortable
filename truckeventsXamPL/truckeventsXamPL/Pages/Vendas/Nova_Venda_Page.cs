@@ -86,7 +86,7 @@ namespace truckeventsXamPL.Pages.Vendas
 
             foreach (var produtovendaviewmodel in produtosEscolhidos)
             {
-                venda_produtos.Add(new Venda_Produto() {Id_Venda = _venda.Id ,Id_produto = produtovendaviewmodel.Id_produto, Quantidade = produtovendaviewmodel.Quantidade,Total = produtovendaviewmodel.Total });
+                venda_produtos.Add(new Venda_Produto() {Id_Venda = _venda.Id , Produto = produtovendaviewmodel._produto,Id_produto = produtovendaviewmodel.Id_produto, Quantidade = produtovendaviewmodel.Quantidade,Total = produtovendaviewmodel.Total });
             }
 
             //if (ValidacaoFinalizacaoVenda(_venda))
