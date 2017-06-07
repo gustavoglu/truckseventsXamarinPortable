@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rg.Plugins.Popup.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -43,6 +44,10 @@ namespace truckeventsXamPL.Pages.Eventos
 
         private void NovaVenda()
         {
+           
+
+
+
             App.Nav.Navigation.PushAsync(new Nova_Venda_Page(new Venda() { Id_evento = _evento.Id }, _evento));
         }
 

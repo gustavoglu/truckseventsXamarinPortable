@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rg.Plugins.Popup.Services;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,6 +9,7 @@ using truckeventsXamPL.Models;
 using truckeventsXamPL.Pages.Eventos;
 using truckeventsXamPL.Util;
 using truckeventsXamPL.ViewlCells;
+using truckeventsXamPL.ViewModels;
 using truckeventsXamPL.WS;
 using Xamarin.Forms;
 
@@ -21,7 +23,7 @@ namespace truckeventsXamPL.Pages.Vendas
         StackLayout sl_hori_3;
         ListView listV_produtosEscolhidos;
         ListView listV_venda_pagamento_fichas;
-        ObservableCollection<Ficha> Fichas;
+        ObservableCollection<FichaValorViewModel> fichasValor;
         Label l_codigoFicha;
         Label l_totalVenda;
         Label l_totalVenda_h;
@@ -57,11 +59,12 @@ namespace truckeventsXamPL.Pages.Vendas
             e_codigoFicha = new Entry() { Placeholder = "00000", Keyboard = Keyboard.Numeric };
             b_adicionarFicha = new Button() { Text = "Adicionar" };
 
-            Fichas = new ObservableCollection<Ficha>();
+            fichasValor = new ObservableCollection<FichaValorViewModel>();
 
             listV_venda_pagamento_fichas = new ListView();
             listV_venda_pagamento_fichas.ItemTemplate = new DataTemplate(typeof(VCell_Fichas));
-            listV_venda_pagamento_fichas.ItemsSource = Fichas;
+            listV_venda_pagamento_fichas.ItemsSource = fichasValor;
+            listV_venda_pagamento_fichas.ItemTapped += ListV_venda_pagamento_fichas_ItemTapped;
 
             listV_produtosEscolhidos = new ListView();
             listV_produtosEscolhidos.ItemTemplate = new DataTemplate(typeof(VCell_Resumo_Venda));
@@ -85,6 +88,13 @@ namespace truckeventsXamPL.Pages.Vendas
 
         }
 
+        private void ListV_venda_pagamento_fichas_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            var fichaValor = e.Item as FichaValorViewModel;
+
+            PopupNavigation.PushAsync(new Popup_Venda_Ficha_Valor(fichaValor));
+        }
+
         private async void B_adicionarFicha_Clicked(object sender, EventArgs e)
         {
             string codigoFicha = e_codigoFicha.Text;
@@ -95,13 +105,13 @@ namespace truckeventsXamPL.Pages.Vendas
 
             if (ficha != null)
             {
-                if (Fichas.ToList().Exists(f => f.Codigo == ficha.Codigo))
+                if (fichasValor.ToList().Exists(f => f._venda_Pagamento_Ficha.Ficha.Codigo == ficha.Codigo))
                 {
                     Utilidades.DialogMessage("Esta Ficha ja foi adicionada a lista de pagamentos! ");
                 }
                 else
                 {
-                    Fichas.Add(ficha);
+                    fichasValor.Add(new FichaValorViewModel(new Venda_Pagamento_Ficha() { Id_Ficha = ficha.Id , Ficha = ficha}));
                 }
             }
 
@@ -163,9 +173,13 @@ namespace truckeventsXamPL.Pages.Vendas
 
         private async Task<bool> ValidaVenda()
         {
+
+            var fichas = from fichaValor in fichasValor
+                         select fichaValor._venda_Pagamento_Ficha.Ficha;
+
             double valorTotalVenda = _venda.TotalVenda.Value;
             double valorTotalFichas = 0;
-            var countFichas = Fichas.Count;
+            var countFichas = fichas.ToList().Count;
 
             if (!(countFichas > 0))
             {
@@ -174,7 +188,7 @@ namespace truckeventsXamPL.Pages.Vendas
             }
             else
             {
-                valorTotalFichas = Fichas.Sum(f => f.Saldo).Value;
+                valorTotalFichas = fichas.Sum(f => f.Saldo).Value;
                 if (valorTotalFichas < valorTotalVenda)
                 {
                     Utilidades.DialogMessage(string.Format("Não existe saldo o suficiente na(s) Ficha(s) Informada(s) para esta Venda, \n Saldo Total Fichas: {0} \n Valor Total Venda: {1}", valorTotalFichas, valorTotalVenda));
@@ -190,9 +204,9 @@ namespace truckeventsXamPL.Pages.Vendas
         {
             _venda_pagamento = new Venda_Pagamento();
 
-            foreach (var ficha in Fichas)
+            foreach (var venda_Pagamento_Ficha in fichasValor)
             {
-                _venda_pagamento.Venda_Pagamento_Fichas.Add(new Venda_Pagamento_Ficha() { Id_Ficha = ficha.Id });
+                _venda_pagamento.Venda_Pagamento_Fichas.Add(venda_Pagamento_Ficha._venda_Pagamento_Ficha);
             }
 
             venda.Venda_Pagamentos.Add(this._venda_pagamento);

@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Rg.Plugins.Popup.Extensions;
+using Rg.Plugins.Popup.Services;
+using System;
+using truckeventsXamPL.Models;
 using truckeventsXamPL.Pages.Eventos;
+using truckeventsXamPL.Pages.Vendas;
 using truckeventsXamPL.Util;
 using truckeventsXamPL.WS;
 using Xamarin.Forms;
@@ -48,6 +52,7 @@ namespace truckeventsXamPL.Pages.Login
 
         private async void B_confirmar_Clicked(object sender, EventArgs e)
         {
+
             var token = await WSOpen.GetLogin(new Models.Login() { UserName = e_email.Text, Password = e_senha.Text });
 
             if (token != null)

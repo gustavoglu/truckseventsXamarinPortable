@@ -1,6 +1,7 @@
 ﻿{
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
+    "Rg.Plugins.Popup": "1.0.4",
     "Xam.FormsPlugin.Iconize": "1.5.0.13-beta",
     "Xam.Plugin.Iconize": "1.5.0.13-beta",
     "Xam.Plugin.Iconize.FontAwesome": "1.5.0.13-beta",
