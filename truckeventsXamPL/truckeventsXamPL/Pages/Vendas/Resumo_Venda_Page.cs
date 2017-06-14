@@ -69,7 +69,7 @@ namespace truckeventsXamPL.Pages.Vendas
             listV_produtosEscolhidos = new ListView();
             listV_produtosEscolhidos.ItemTemplate = new DataTemplate(typeof(VCell_Resumo_Venda));
             listV_produtosEscolhidos.ItemsSource = from venda_produto in _venda.Venda_Produtos
-                                                   select new { Descricao = venda_produto.Produto.Descricao, Quantidade = venda_produto.Quantidade, Total = venda_produto.Total } ;
+                                                   select new { Descricao = venda_produto.Produto.Descricao, Quantidade = venda_produto.Quantidade, Total = venda_produto.Total };
 
             toolbar_confirmar = new ToolbarItem("Confirmar", "", Confirmar, ToolbarItemOrder.Default);
             toolbar_cancelar = new ToolbarItem("Cancelar", "", Cancelar, ToolbarItemOrder.Default);
@@ -99,9 +99,11 @@ namespace truckeventsXamPL.Pages.Vendas
         private async void B_adicionarFicha_Clicked(object sender, EventArgs e)
         {
             string codigoFicha = e_codigoFicha.Text;
+
             ValidaCampoFicha(codigoFicha);
 
             Ficha ficha = null;
+
             ficha = await getFicha(codigoFicha);
 
             if (ficha != null)
@@ -112,7 +114,7 @@ namespace truckeventsXamPL.Pages.Vendas
                 }
                 else
                 {
-                    fichasValor.Add(new FichaValorViewModel(new Venda_Pagamento_Ficha() { Id_Ficha = ficha.Id , Ficha = ficha}));
+                    fichasValor.Add(new FichaValorViewModel(new Venda_Pagamento_Ficha() { Id_Ficha = ficha.Id, Ficha = ficha }));
                 }
             }
 
@@ -128,16 +130,17 @@ namespace truckeventsXamPL.Pages.Vendas
 
             AdicionaVenda_Pagamento_Fichas(_venda);
 
-            var validacao = await ValidaVenda();
-            if (validacao)
+            if (ValidaVenda())
             {
-                var result = await WSOpen.Post(Constantes.WS_VENDAS, _venda);
-                if (result != null)
+                if (!(this._venda.Venda_Pagamentos.Count > 0))
                 {
-                    Utilidades.DialogMessage("Venda Realizada");
-                    await App.Nav.PushAsync(new Evento_Vendas_Page(_evento));
+                    var result = await WSOpen.Post(Constantes.WS_VENDAS, _venda);
+                    if (result != null)
+                    {
+                        Utilidades.DialogMessage("Venda Realizada");
+                        await App.Nav.PushAsync(new Evento_Vendas_Page(_evento));
+                    }
                 }
-
             }
         }
 
@@ -172,14 +175,20 @@ namespace truckeventsXamPL.Pages.Vendas
 
         }
 
-        private async Task<bool> ValidaVenda()
+        private bool ValidaVenda()
         {
 
             var fichas = from fichaValor in fichasValor
                          select fichaValor._venda_Pagamento_Ficha.Ficha;
 
+            // Total Saldo das Fichas
+            var valorTotalFichas = fichas.Sum(f => f.Saldo).Value;
+
+            // Total de Valor Pré informado
+            var valorTotalInfoFichas = _venda_pagamento.Venda_Pagamento_Fichas.Sum(p => p.ValorInformado);
+
             double valorTotalVenda = _venda.TotalVenda.Value;
-            double valorTotalFichas = 0;
+
             var countFichas = fichas.ToList().Count;
 
             if (!(countFichas > 0))
@@ -187,17 +196,42 @@ namespace truckeventsXamPL.Pages.Vendas
                 Utilidades.DialogMessage("Nenhuma Ficha informada como pagamento");
                 return false;
             }
-            else
-            {
-                valorTotalFichas = fichas.Sum(f => f.Saldo).Value;
-                if (valorTotalFichas < valorTotalVenda)
-                {
-                    Utilidades.DialogMessage(string.Format("Não existe saldo o suficiente na(s) Ficha(s) Informada(s) para esta Venda, \n Saldo Total Fichas: {0} \n Valor Total Venda: {1}", valorTotalFichas, valorTotalVenda));
-                    return false;
-                }
 
-                return true;
+            //Se não houver saldo suficiente para a venda
+            if (valorTotalFichas < valorTotalVenda)
+            {
+                Utilidades.DialogMessage(string.Format("Não existe saldo o suficiente na(s) Ficha(s) Informada(s) para esta Venda, \n Saldo Total Fichas: {0} \n Valor Total Venda: {1}", valorTotalFichas, valorTotalVenda));
+                return false;
             }
+
+            //Se valor pré informado for maior que o valor da venda
+            if (valorTotalInfoFichas > 0 && valorTotalInfoFichas > valorTotalVenda)
+            {
+                var fichasComValorInfo = from vendaPagamentoFicha in _venda_pagamento.Venda_Pagamento_Fichas
+                                         where vendaPagamentoFicha.ValorInformado > 0
+                                         select vendaPagamentoFicha;
+
+                var diferenca = valorTotalInfoFichas - valorTotalVenda;
+
+                string fichasEValores = string.Empty;
+
+                foreach (var fichaComValorInfo in fichasComValorInfo)
+                {
+                    if (fichasEValores == string.Empty)
+                    {
+                        fichasEValores = string.Format("\n Ficha Cód:{0} , Valor Informado: {1}", fichaComValorInfo.Ficha.Codigo, fichaComValorInfo.ValorInformado);
+                    }
+                    else
+                    {
+                        fichasEValores = fichasEValores + string.Format("\n Ficha Cód:{0} , Valor Informado: {1}", fichaComValorInfo.Ficha.Codigo, fichaComValorInfo.ValorInformado);
+                    }
+                }
+                
+                Utilidades.DialogMessage(string.Format("A Soma dos valores pré-informados nas fichas é maior que o Total da Venda, verificar: \n {0} \n Total Pré-Informado: {1} \n Total Venda: {2} \n Diferença : {3} ", fichasEValores, valorTotalInfoFichas, valorTotalVenda, diferenca));
+                return false;
+            }
+
+            return true;
 
         }
 

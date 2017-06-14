@@ -47,8 +47,8 @@ namespace truckeventsXamPL.ViewModels
 
         public double Valor
         {
-            get { return _venda_Pagamento_Ficha.Valor; }
-            set { _venda_Pagamento_Ficha.Valor = value; Notify(nameof(this.Valor)); }
+            get { return _venda_Pagamento_Ficha.ValorInformado; }
+            set { _venda_Pagamento_Ficha.ValorInformado = value; Notify(nameof(this.Valor)); }
         }
 
         private void Notify(string propertyName)

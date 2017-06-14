@@ -44,6 +44,7 @@ namespace truckeventsXamPL.WS
         public static async Task<T> Get<T>(string uri)
         {
             HttpClient client = new HttpClient();
+
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Constantes.Token.access_token);
 
             var result = client.GetAsync(uri).Result;

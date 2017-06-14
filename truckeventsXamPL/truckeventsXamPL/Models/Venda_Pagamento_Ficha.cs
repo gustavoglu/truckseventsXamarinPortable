@@ -16,7 +16,7 @@ namespace truckeventsXamPL.Models
 
         public virtual Ficha Ficha { get; set; }
 
-        public double Valor { get; set; }
+        public double ValorInformado { get; set; }
 
     }
 }
