@@ -132,15 +132,15 @@ namespace truckeventsXamPL.Pages.Vendas
 
             if (ValidaVenda())
             {
-                if (!(this._venda.Venda_Pagamentos.Count > 0))
+                _venda.Id_evento = _evento.Id.Value;
+                var result = await WSOpen.Post(Constantes.WS_VENDAS, _venda);
+
+                if (result != null)
                 {
-                    var result = await WSOpen.Post(Constantes.WS_VENDAS, _venda);
-                    if (result != null)
-                    {
-                        Utilidades.DialogMessage("Venda Realizada");
-                        await App.Nav.PushAsync(new Evento_Vendas_Page(_evento));
-                    }
+                    Utilidades.DialogMessage("Venda Realizada");
+                    await App.Nav.PushAsync(new Evento_Vendas_Page(_evento));
                 }
+
             }
         }
 
@@ -226,7 +226,7 @@ namespace truckeventsXamPL.Pages.Vendas
                         fichasEValores = fichasEValores + string.Format("\n Ficha Cód:{0} , Valor Informado: {1}", fichaComValorInfo.Ficha.Codigo, fichaComValorInfo.ValorInformado);
                     }
                 }
-                
+
                 Utilidades.DialogMessage(string.Format("A Soma dos valores pré-informados nas fichas é maior que o Total da Venda, verificar: \n {0} \n Total Pré-Informado: {1} \n Total Venda: {2} \n Diferença : {3} ", fichasEValores, valorTotalInfoFichas, valorTotalVenda, diferenca));
                 return false;
             }
@@ -237,14 +237,18 @@ namespace truckeventsXamPL.Pages.Vendas
 
         private void AdicionaVenda_Pagamento_Fichas(Venda venda)
         {
-            _venda_pagamento = new Venda_Pagamento();
-
-            foreach (var venda_Pagamento_Ficha in fichasValor)
+            if (!venda.Venda_Pagamentos.Any())
             {
-                _venda_pagamento.Venda_Pagamento_Fichas.Add(venda_Pagamento_Ficha._venda_Pagamento_Ficha);
-            }
 
-            venda.Venda_Pagamentos.Add(this._venda_pagamento);
+                _venda_pagamento = new Venda_Pagamento();
+
+                foreach (var venda_Pagamento_Ficha in fichasValor)
+                {
+                    _venda_pagamento.Venda_Pagamento_Fichas.Add(venda_Pagamento_Ficha._venda_Pagamento_Ficha);
+                }
+
+                venda.Venda_Pagamentos.Add(this._venda_pagamento);
+            }
         }
     }
 }
