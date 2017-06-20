@@ -54,6 +54,7 @@
     <Compile Include="Models\Produto_Cor.cs" />
     <Compile Include="Models\Produto_Tipo.cs" />
     <Compile Include="Models\Produto_Variacao.cs" />
+    <Compile Include="Models\RestErrorMessage.cs" />
     <Compile Include="Models\Token.cs" />
     <Compile Include="Models\TokenEnvio.cs" />
     <Compile Include="Models\Usuario.cs" />

@@ -25,5 +25,16 @@ namespace truckeventsXamPL.Util
         {
              await App.Current.MainPage.DisplayAlert("Atenção", mensagem, "Ok");
         }
+
+        public static async void DialogErrorMessage(string mensagem)
+        {
+            await App.Current.MainPage.DisplayAlert("Erro", mensagem, "Ok");
+        }
+
+        public static async void DialogErrorRestMessage(string mensagem)
+        {
+            mensagem = mensagem.Replace("message:", "");
+            await App.Current.MainPage.DisplayAlert("Erro", mensagem, "Ok");
+        }
     }
 }

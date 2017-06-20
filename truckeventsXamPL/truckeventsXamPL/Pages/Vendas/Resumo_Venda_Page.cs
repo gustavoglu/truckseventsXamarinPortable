@@ -200,7 +200,7 @@ namespace truckeventsXamPL.Pages.Vendas
             //Se não houver saldo suficiente para a venda
             if (valorTotalFichas < valorTotalVenda)
             {
-                Utilidades.DialogMessage(string.Format("Não existe saldo o suficiente na(s) Ficha(s) Informada(s) para esta Venda, \n Saldo Total Fichas: {0} \n Valor Total Venda: {1}", valorTotalFichas, valorTotalVenda));
+                Utilidades.DialogMessage(string.Format("Não existe saldo suficiente na(s) Ficha(s) Informada(s) para esta Venda, \n Saldo Total Fichas: {0} \n Valor Total Venda: {1}", valorTotalFichas, valorTotalVenda));
                 return false;
             }
 

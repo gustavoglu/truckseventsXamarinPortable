@@ -41,7 +41,7 @@ namespace truckeventsXamPL.WS
             }
         }
 
-        public static async Task<T> Get<T>(string uri)
+        public static async Task<T> Get<T>(string uri) where T : class
         {
             HttpClient client = new HttpClient();
 
@@ -49,9 +49,10 @@ namespace truckeventsXamPL.WS
 
             var result = client.GetAsync(uri).Result;
 
+            var obj = await result.Content.ReadAsStringAsync();
+
             if (result.IsSuccessStatusCode)
             {
-                var obj = await result.Content.ReadAsStringAsync();
 
                 var objDes = JsonConvert.DeserializeObject<T>(obj);
 
@@ -61,15 +62,15 @@ namespace truckeventsXamPL.WS
                 }
                 else
                 {
-                    return default(T);
+                    return null;
                 }
             }
 
-            return default(T);
+            return null;
 
         }
 
-        public static async Task<T> Post<T>(string uri, T obj)
+        public static async Task<T> Post<T>(string uri, T obj) where T : class
         {
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Constantes.Token.access_token);
@@ -90,7 +91,17 @@ namespace truckeventsXamPL.WS
             }
             else
             {
-                return default(T);
+                string objDes = resultString;
+
+                try
+                {
+                    objDes = JsonConvert.DeserializeObject<RestErrorMessage>(resultString).Message;
+                }
+                catch { }
+
+                Utilidades.DialogErrorRestMessage(objDes);
+
+                return null;
             }
 
         }
@@ -149,8 +160,8 @@ namespace truckeventsXamPL.WS
         {
             HttpClient client = new HttpClient();
             string uri = Constantes.WS_REGISTRO;
-        
-            StringContent content = new StringContent(JsonConvert.SerializeObject(usuarioRegistroViewModel),Encoding.UTF8,"application/json");
+
+            StringContent content = new StringContent(JsonConvert.SerializeObject(usuarioRegistroViewModel), Encoding.UTF8, "application/json");
 
             var result = await client.PostAsync(uri, content);
             string resultString = await result.Content.ReadAsStringAsync();
