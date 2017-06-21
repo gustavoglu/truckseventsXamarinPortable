@@ -19,8 +19,6 @@ namespace truckeventsXamPL.Pages.Eventos
 
         StackLayout sl_principal;
         ListView listV_Eventos;
-        ToolbarItem toolbar_Produtos;
-        ToolbarItem toolbar_Usuarios;
 
 
         #endregion
@@ -30,14 +28,14 @@ namespace truckeventsXamPL.Pages.Eventos
         public Eventos_Page()
         {
 
+            this.SetValue(NavigationPage.BarBackgroundColorProperty, Constantes.ROXOPADRAO);
+
             #region Layout
-            listV_Eventos = new ListView();
+            listV_Eventos = new ListView() {  HasUnevenRows = true};
             listV_Eventos.ItemTemplate = new DataTemplate(typeof(VCell_Eventos));
             listV_Eventos.ItemsSource = Eventos;
 
 
-            toolbar_Produtos = new ToolbarItem("Produtos","",()=> { });
-            toolbar_Usuarios = new ToolbarItem("Usuarios", "", () => { });
             #endregion
 
             Eventos = new ObservableCollection<Evento>();
@@ -45,8 +43,6 @@ namespace truckeventsXamPL.Pages.Eventos
             listV_Eventos.ItemTapped += ListV_Eventos_ItemTapped;
 
             sl_principal = new StackLayout() {Padding = Constantes.PADDINGDEFAULT, Children = { listV_Eventos } };
-            this.ToolbarItems.Add(toolbar_Produtos);
-            this.ToolbarItems.Add(toolbar_Usuarios);
             this.Content = sl_principal;
 
 
@@ -55,12 +51,12 @@ namespace truckeventsXamPL.Pages.Eventos
 
         }
 
-        private void ListV_Eventos_ItemTapped(object sender, ItemTappedEventArgs e)
+        private async void ListV_Eventos_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var evento = e.Item as Evento;
             if (evento != null)
             {
-                App.Nav.PushAsync(new Evento_Vendas_Page(evento));
+                await App.Nav.PushAsync(new Evento_Vendas_Page(evento));
             }
         }
 

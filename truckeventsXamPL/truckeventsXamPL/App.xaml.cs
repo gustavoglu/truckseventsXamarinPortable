@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using truckeventsXamPL.Pages.Login;
 using truckeventsXamPL.Pages.Registro;
+using truckeventsXamPL.Util;
 using Xamarin.Forms;
 
 namespace truckeventsXamPL
@@ -15,8 +16,8 @@ namespace truckeventsXamPL
         public App()
         {
             InitializeComponent();
-            Nav = new NavigationPage(new Login_Page());
-            MainPage = Nav; 
+            Nav = new NavigationPage(new Login_Page()) { BarBackgroundColor = Color.Black };
+            MainPage = Nav;
         }
 
         protected override void OnStart()

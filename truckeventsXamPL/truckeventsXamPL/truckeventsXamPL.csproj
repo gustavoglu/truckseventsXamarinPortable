@@ -78,10 +78,12 @@
     <Compile Include="ViewlCells\VCell_Eventos.cs" />
     <Compile Include="ViewlCells\VCell_Fichas.cs" />
     <Compile Include="ViewlCells\VCell_Resumo_Venda.cs" />
+    <Compile Include="ViewlCells\VCell_Vendas.cs" />
     <Compile Include="ViewlCells\VCell_Venda_Produto.cs" />
     <Compile Include="ViewModels\FichaValorViewModel.cs" />
     <Compile Include="ViewModels\ProdutoVendaViewModel.cs" />
     <Compile Include="ViewModels\UsuarioRegistroViewModel.cs" />
+    <Compile Include="ViewModels\VendaViewModel.cs" />
     <Compile Include="WS\WSOpen.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -134,6 +136,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Img\logo1x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

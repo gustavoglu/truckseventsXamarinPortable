@@ -21,6 +21,10 @@ namespace truckeventsXamPL.Util
 
         public static Color VERDESELECAO = Color.FromHex("#c9ff46");
 
+        public static Color VERMELHOPADRAO = Color.FromHex("#cd3030");
+
+        public static Color ROXOPADRAO = Color.FromHex("#6730cd");
+
         #endregion
 
 

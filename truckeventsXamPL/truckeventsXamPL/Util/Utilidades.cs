@@ -23,7 +23,7 @@ namespace truckeventsXamPL.Util
 
         public static async void DialogMessage(string mensagem)
         {
-             await App.Current.MainPage.DisplayAlert("Atenção", mensagem, "Ok");
+            await App.Current.MainPage.DisplayAlert("Atenção", mensagem, "Ok");
         }
 
         public static async void DialogErrorMessage(string mensagem)
@@ -35,6 +35,34 @@ namespace truckeventsXamPL.Util
         {
             mensagem = mensagem.Replace("message:", "");
             await App.Current.MainPage.DisplayAlert("Erro", mensagem, "Ok");
+        }
+
+        public static void IndicatorControl(ref ActivityIndicator indicator, bool enable)
+        {
+            if (enable)
+            {
+                indicator.IsEnabled = true;
+                indicator.IsRunning = true;
+                indicator.IsVisible = true;
+            }
+            else
+            {
+                indicator.IsEnabled = false;
+                indicator.IsRunning = false;
+                indicator.IsVisible = false;
+            }
+        }
+
+        public static void EnableControlButton(ref Button button, bool enable)
+        {
+            if (enable)
+            {
+                button.IsEnabled = true;
+            }
+            else
+            {
+                button.IsEnabled = false;
+            }
         }
     }
 }

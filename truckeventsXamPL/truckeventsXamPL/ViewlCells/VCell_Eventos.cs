@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using truckeventsXamPL.Util;
 using Xamarin.Forms;
 
 namespace truckeventsXamPL.ViewlCells
@@ -13,13 +14,17 @@ namespace truckeventsXamPL.ViewlCells
 
         StackLayout sl_principal;
         Label l_descricaoEvento;
+        Frame frame;
 
 
         #endregion
 
         public VCell_Eventos()
         {
-            l_descricaoEvento = new Label() { HorizontalOptions = LayoutOptions.CenterAndExpand };
+
+            frame = new Frame() {  HasShadow = true, OutlineColor = Constantes.ROXOPADRAO};
+
+            l_descricaoEvento = new Label() { HorizontalOptions = LayoutOptions.CenterAndExpand , TextColor = Constantes.ROXOPADRAO};
 
             l_descricaoEvento.SetBinding(Label.TextProperty, "Descricao");
 
@@ -33,7 +38,9 @@ namespace truckeventsXamPL.ViewlCells
                 }
             };
 
-            this.View = sl_principal;
+            frame.Content = sl_principal;
+
+            this.View = frame;
         }
     }
 }
