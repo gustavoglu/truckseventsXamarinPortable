@@ -32,12 +32,14 @@ namespace truckeventsXamPL.Pages.Vendas
             this._venda = venda;
             this._evento = evento;
 
+            this.Title = "Nova Venda";
+
             VCell_Venda_Produto.AdicionaQuantidadeHandler += VCell_Venda_Produto_AdicionaQuantidadeHandler;
             VCell_Venda_Produto.DiminuiQuantidadeHandler += VCell_Venda_Produto_DiminuiQuantidadeHandler;
 
             ProdutosVendaViewModel = new ObservableCollection<ProdutoVendaViewModel>();
-            l_total = new Label() {Text = "0", HorizontalOptions = LayoutOptions.End };
-            l_total_h = new Label() { Text = "Total", HorizontalOptions = LayoutOptions.End };
+            l_total = new Label() {Text = "R$ 0 ", HorizontalOptions = LayoutOptions.End, TextColor = Color.ForestGreen , FontAttributes = FontAttributes.Bold};
+            l_total_h = new Label() { Text = "Total", HorizontalOptions = LayoutOptions.End , TextColor = Color.ForestGreen, FontAttributes = FontAttributes.Bold };
           
             listV_produtos = new ListView();
             listV_produtos.ItemsSource = ProdutosVendaViewModel;
@@ -54,8 +56,9 @@ namespace truckeventsXamPL.Pages.Vendas
                 Padding = Constantes.PADDINGDEFAULT,
                 Children =
                 {
-                    listV_produtos,
-                    sl_hori_total
+                     sl_hori_total,
+                    listV_produtos
+                   
                 }
             };
             this.ToolbarItems.Add(toolbar_cancelar);
@@ -77,7 +80,7 @@ namespace truckeventsXamPL.Pages.Vendas
 
         private void Finalizar()
         {
-            double totalvenda = double.Parse(l_total.Text);
+            double totalvenda = double.Parse(l_total.Text.Replace("R$ ",""));
             _venda.TotalVenda = totalvenda;
 
             var produtosEscolhidos = ProdutosVendaViewModel.Where(vm => vm.Quantidade > 0);
@@ -149,7 +152,7 @@ namespace truckeventsXamPL.Pages.Vendas
         private void CalculaTotais()
         {
             double total = ProdutosVendaViewModel.Where(vm => vm.Quantidade > 0).Sum(vm => vm.Total);
-            l_total.Text = total.ToString();
+            l_total.Text = string.Format("R$ {0}",total);
         }
     }
 }

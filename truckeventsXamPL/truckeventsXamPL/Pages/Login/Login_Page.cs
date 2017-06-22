@@ -30,7 +30,7 @@ namespace truckeventsXamPL.Pages.Login
 
             #region Layout
 
-            //NavigationPage.SetHasNavigationBar(this, false);
+            NavigationPage.SetHasNavigationBar(this, false);
 
             img_logo = new Image { VerticalOptions = LayoutOptions.CenterAndExpand, HorizontalOptions = LayoutOptions.CenterAndExpand, Source = ImageSource.FromResource("truckeventsXamPL.Img.logo1x.png") };
             e_email = new Entry { Text = "loja@hotmail.com", WidthRequest = 200, Placeholder = "E-mail", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, TextColor = Color.White };

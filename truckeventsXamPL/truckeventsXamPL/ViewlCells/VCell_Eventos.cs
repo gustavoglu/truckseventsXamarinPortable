@@ -14,6 +14,7 @@ namespace truckeventsXamPL.ViewlCells
 
         StackLayout sl_principal;
         Label l_descricaoEvento;
+        Label l_dataEvento;
         Frame frame;
 
 
@@ -22,10 +23,10 @@ namespace truckeventsXamPL.ViewlCells
         public VCell_Eventos()
         {
 
-            frame = new Frame() {  HasShadow = true, OutlineColor = Constantes.ROXOPADRAO};
+            frame = new Frame() {  HasShadow = true, OutlineColor = Constantes.ROXOPADRAO , Margin = 5};
 
             l_descricaoEvento = new Label() { HorizontalOptions = LayoutOptions.CenterAndExpand , TextColor = Constantes.ROXOPADRAO};
-
+            l_dataEvento = new Label() { HorizontalOptions = LayoutOptions.StartAndExpand, TextColor = Constantes.ROXOPADRAO };
             l_descricaoEvento.SetBinding(Label.TextProperty, "Descricao");
 
 

@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using truckeventsXamPL.Models;
 using truckeventsXamPL.Pages.Vendas;
 using truckeventsXamPL.Util;
+using truckeventsXamPL.ViewlCells;
+using truckeventsXamPL.ViewModels;
 using truckeventsXamPL.WS;
 using Xamarin.Forms;
 
@@ -21,14 +23,17 @@ namespace truckeventsXamPL.Pages.Eventos
         ListView listV_VendasEvento;
         ToolbarItem toolbar_novaVenda;
 
-        ObservableCollection<Venda> Vendas; 
+        ObservableCollection<VendaViewModel> Vendas; 
         Evento _evento;
 
         public Evento_Vendas_Page(Evento evento)
         {
             this._evento = evento;
-            Vendas = new ObservableCollection<Venda>();
-            listV_VendasEvento = new ListView();
+            this.Title = string.Format("Vendas Evento: {0}" , evento.Descricao);
+
+            Vendas = new ObservableCollection<VendaViewModel>();
+            listV_VendasEvento = new ListView() { HasUnevenRows = true, SeparatorVisibility = SeparatorVisibility.None};
+            listV_VendasEvento.ItemTemplate = new DataTemplate(typeof(VCell_Vendas));
             listV_VendasEvento.ItemsSource = Vendas;
 
             toolbar_novaVenda = new ToolbarItem("Nova Venda", "", NovaVenda, ToolbarItemOrder.Default);
@@ -57,7 +62,7 @@ namespace truckeventsXamPL.Pages.Eventos
             {
                 foreach (var venda in _evento.Vendas)
                 {
-                    Vendas.Add(venda);
+                    Vendas.Add(new VendaViewModel(venda));
                 }
             }
         }
@@ -69,9 +74,10 @@ namespace truckeventsXamPL.Pages.Eventos
 
             if (vendas != null && vendas.Count > 0)
             {
+                vendas = vendas.OrderByDescending(x => x.CriadoEm).ToList();
                 foreach (var venda in vendas)
                 {
-                    Vendas.Add(venda);
+                    Vendas.Add(new VendaViewModel(venda));
                 }
             }
 

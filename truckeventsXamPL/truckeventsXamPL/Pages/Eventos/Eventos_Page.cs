@@ -30,6 +30,8 @@ namespace truckeventsXamPL.Pages.Eventos
 
             this.SetValue(NavigationPage.BarBackgroundColorProperty, Constantes.ROXOPADRAO);
 
+            this.Title = "Meus Eventos";
+
             #region Layout
             listV_Eventos = new ListView() {  HasUnevenRows = true};
             listV_Eventos.ItemTemplate = new DataTemplate(typeof(VCell_Eventos));

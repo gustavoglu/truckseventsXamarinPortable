@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using truckeventsXamPL.Models;
+using truckeventsXamPL.Util;
 using Xamarin.Forms;
 
 namespace truckeventsXamPL.ViewModels
@@ -22,7 +23,7 @@ namespace truckeventsXamPL.ViewModels
 
         public string Data
         {
-            get { return string.Format("{0},{1}",_venda.Data.Value.ToLocalTime(),_venda.Data.Value.Date.ToString()); }
+            get { return string.Format("{1} as {0}",_venda.CriadoEm.Value.ToLocalTime().ToString(@"hh\:mm").ToString(),_venda.CriadoEm.Value.Date.ToString("dd/MM")); }
             set { Data = value; Notify(nameof(Data)); }
         }
 
@@ -38,16 +39,16 @@ namespace truckeventsXamPL.ViewModels
 
         public string Status
         {
-            get { return status; }
-            set { status = value; }
+            get { return _venda.Cancelada == true ? "Cancelada" : "Realizada"; }
+            set { status = value; Notify(nameof(this.Status)); }
         }
 
         private Color corStatus;
 
         public Color CorStatus
         {
-            get { return corStatus; }
-            set { corStatus = value; }
+            get { return _venda.Cancelada == true ? Color.IndianRed : Color.Green; }
+            set { corStatus = value; Notify(nameof(this.CorStatus)); }
         }
 
 
