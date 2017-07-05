@@ -41,6 +41,7 @@ namespace truckeventsXamPL.Pages.Vendas
         Venda _venda;
         Evento _evento;
         Venda_Pagamento _venda_pagamento;
+        ActivityIndicator indicator;
 
         public Resumo_Venda_Page(Venda venda, Evento _evento)
         {
@@ -48,7 +49,7 @@ namespace truckeventsXamPL.Pages.Vendas
             this._evento = _evento;
             this._venda_pagamento = new Venda_Pagamento();
 
-            l_totalVenda_h = new Label() { Text = "Total Venda: ", TextColor = Color.ForestGreen , FontAttributes = FontAttributes.Bold};
+            l_totalVenda_h = new Label() { Text = "Total Venda: ", TextColor = Color.ForestGreen, FontAttributes = FontAttributes.Bold };
             l_totalVenda = new Label() { Text = string.Format("R$ {0}", venda.TotalVenda), TextColor = Color.ForestGreen, FontAttributes = FontAttributes.Bold };
             e_troco = new Entry() { Keyboard = Keyboard.Numeric };
             l_troco = new Label() { Text = "Troco:" };
@@ -56,9 +57,9 @@ namespace truckeventsXamPL.Pages.Vendas
             l_nomeCliente = new Label() { Text = "Nome Cliente:", HorizontalOptions = LayoutOptions.CenterAndExpand };
             e_nomeCliente = new Entry() { Placeholder = "ex: Pedro", HorizontalOptions = LayoutOptions.CenterAndExpand };
             l_codigoFicha = new Label() { Text = "Cód. Ficha Pagamento: ", HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Center };
-            e_codigoFicha = new Entry() { Placeholder = "00000", Keyboard = Keyboard.Numeric, MinimumWidthRequest = 150 , TextColor = Color.ForestGreen};
+            e_codigoFicha = new Entry() { Placeholder = "00000", Keyboard = Keyboard.Numeric, HorizontalOptions = LayoutOptions.FillAndExpand, TextColor = Color.ForestGreen };
             b_adicionarFicha = new Button() { Text = "Adicionar Ficha", HorizontalOptions = LayoutOptions.FillAndExpand, TextColor = Color.White, BackgroundColor = Color.ForestGreen };
-
+            indicator = new ActivityIndicator() { IsRunning = true, IsVisible = false, Color = Constantes.ROXOPADRAO };
             fichasValor = new ObservableCollection<FichaValorViewModel>();
 
             listV_venda_pagamento_fichas = new ListView();
@@ -74,7 +75,7 @@ namespace truckeventsXamPL.Pages.Vendas
             toolbar_confirmar = new ToolbarItem("Confirmar", "", Confirmar, ToolbarItemOrder.Default);
             toolbar_cancelar = new ToolbarItem("Cancelar", "", Cancelar, ToolbarItemOrder.Default);
 
-            sl_hori_1 = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = { l_codigoFicha, e_codigoFicha } };
+            sl_hori_1 = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = { l_codigoFicha, e_codigoFicha, indicator } };
             sl_hori_2 = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = { l_totalVenda_h, l_totalVenda } };
             sl_hori_3 = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = { l_troco, e_troco, l_trocoResultado } };
 
@@ -100,24 +101,24 @@ namespace truckeventsXamPL.Pages.Vendas
         {
             string codigoFicha = e_codigoFicha.Text;
 
-            ValidaCampoFicha(codigoFicha);
-
-            Ficha ficha = null;
-
-            ficha = await getFicha(codigoFicha);
-
-            if (ficha != null)
+            if (ValidaCampoFicha(codigoFicha))
             {
-                if (fichasValor.ToList().Exists(f => f._venda_Pagamento_Ficha.Ficha.Codigo == ficha.Codigo))
+                Ficha ficha = null;
+
+                ficha = await getFicha(codigoFicha);
+
+                if (ficha != null)
                 {
-                    Utilidades.DialogMessage("Esta Ficha ja foi adicionada a lista de pagamentos! ");
-                }
-                else
-                {
-                    fichasValor.Add(new FichaValorViewModel(new Venda_Pagamento_Ficha() { Id_Ficha = ficha.Id, Ficha = ficha }));
+                    if (fichasValor.ToList().Exists(f => f._venda_Pagamento_Ficha.Ficha.Codigo == ficha.Codigo))
+                    {
+                        Utilidades.DialogMessage("Esta Ficha ja foi adicionada a lista de pagamentos! ");
+                    }
+                    else
+                    {
+                        fichasValor.Add(new FichaValorViewModel(new Venda_Pagamento_Ficha() { Id_Ficha = ficha.Id, Ficha = ficha }));
+                    }
                 }
             }
-
         }
 
         private void Cancelar()
@@ -146,33 +147,56 @@ namespace truckeventsXamPL.Pages.Vendas
 
         private async Task<Ficha> getFicha(string codigo)
         {
-            var ficha = await WSOpen.Get<Ficha>(string.Format("{0}?id_evento={1}&codigo={2}", Constantes.WS_FICHAS, _evento.Id, codigo));
+            Ficha ficha = null;
+
+            disableFichaViews();
+
+            await Task.Factory.StartNew(async () =>
+            {
+                ficha = await WSOpen.Get<Ficha>(string.Format("{0}?id_evento={1}&codigo={2}", Constantes.WS_FICHAS, _evento.Id, codigo));
+            });
 
             if (ficha == null)
             {
                 Utilidades.DialogMessage("Esta ficha não existe");
             }
 
-            if (!(ficha.Saldo > 0))
+            if (ficha != null && !(ficha.Saldo > 0))
             {
                 Utilidades.DialogMessage("Esta ficha não tem saldo");
             }
 
-            return ficha ?? null;
+            enableFichaViews();
+
+            return ficha ;
 
         }
 
-        private void ValidaCampoFicha(string textCampoFicha)
+        private void disableFichaViews()
         {
-            if (textCampoFicha == null)
-            {
-                Utilidades.DialogMessage("Campo do código da ficha vázio");
-            }
-            if (textCampoFicha == "")
-            {
-                Utilidades.DialogMessage("Campo do código da ficha vázio");
-            }
+            b_adicionarFicha.IsEnabled = false;
+            indicator.IsVisible = true;
 
+        }
+
+        private void enableFichaViews()
+        {
+            b_adicionarFicha.IsEnabled = true;
+            indicator.IsVisible = false;
+        }
+
+
+        private bool ValidaCampoFicha(string textCampoFicha)
+        {
+            if (textCampoFicha == null || textCampoFicha == string.Empty || textCampoFicha == "")
+            {
+                Utilidades.DialogMessage("Campo do código da ficha vázio");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         private bool ValidaVenda()
