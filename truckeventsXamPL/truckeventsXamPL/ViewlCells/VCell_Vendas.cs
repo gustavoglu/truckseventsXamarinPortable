@@ -25,18 +25,17 @@ namespace truckeventsXamPL.ViewlCells
             grid_data = new Grid() { HorizontalOptions = LayoutOptions.StartAndExpand  };
             grid_total = new Grid() { HorizontalOptions = LayoutOptions.EndAndExpand };
 
-            l_data = new Label() { Text = "Vendido Em:" };
-            l_totalVenda = new Label() { Text = "Total:" };
-            l_data_e = new Label() { HorizontalOptions = LayoutOptions.CenterAndExpand };
-            l_totalVenda_e = new Label() { HorizontalOptions = LayoutOptions.CenterAndExpand};
-            l_status = new Label() { HorizontalOptions = LayoutOptions.CenterAndExpand , VerticalOptions = LayoutOptions.CenterAndExpand};
+            l_data = new Label() { Text = "Vendido Em:" , TextColor = Color.White};
+            l_totalVenda = new Label() { Text = "Total:", TextColor = Color.White };
+            l_data_e = new Label() { HorizontalOptions = LayoutOptions.CenterAndExpand, TextColor = Color.White };
+            l_totalVenda_e = new Label() { HorizontalOptions = LayoutOptions.CenterAndExpand, TextColor = Color.White };
+            l_status = new Label() { HorizontalOptions = LayoutOptions.CenterAndExpand , VerticalOptions = LayoutOptions.CenterAndExpand, TextColor = Color.White };
 
             
             l_data_e.SetBinding(Label.TextProperty, "Data");
             l_totalVenda_e.SetBinding(Label.TextProperty, "TotalVenda", stringFormat: "R${0}");
             l_status.SetBinding(Label.TextProperty, "Status");
-            l_status.SetBinding(Label.TextColorProperty, "CorStatus");
-            frame.SetBinding(Frame.OutlineColorProperty, "CorStatus" );
+            frame.SetBinding(Frame.BackgroundColorProperty, "CorStatus" );
 
             grid_data.Children.Add(l_data, 0, 0);
             grid_data.Children.Add(l_data_e, 0, 1);

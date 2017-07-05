@@ -33,12 +33,12 @@ namespace truckeventsXamPL.ViewlCells
 
         public VCell_Venda_Produto()
         {
-            box_corProduto = new BoxView() { };
+            box_corProduto = new BoxView() { Margin = 5 };
             l_nomeProduto = new Label() { VerticalTextAlignment = TextAlignment.Center, FontAttributes = FontAttributes.Bold };
             l_valor = new Label() { VerticalTextAlignment = TextAlignment.Center };
             l_totalValor = new Label() { VerticalTextAlignment = TextAlignment.Center , HorizontalOptions = LayoutOptions.End };
             l_quantidade = new Label() { VerticalTextAlignment = TextAlignment.Center, HorizontalOptions = LayoutOptions.EndAndExpand};
-            b_diminuir = new Button() { BackgroundColor = Color.Transparent, TextColor = Color.IndianRed, Text = "Remover" , HorizontalOptions = LayoutOptions.EndAndExpand};
+            b_diminuir = new Button() { TextColor = Color.White, BackgroundColor = Color.IndianRed, Text = "Remover" , HorizontalOptions = LayoutOptions.EndAndExpand};
             st_quantidade = new Stepper() {  HorizontalOptions = LayoutOptions.EndAndExpand };
 
             clickBackground = new TapGestureRecognizer();
@@ -47,10 +47,19 @@ namespace truckeventsXamPL.ViewlCells
             l_quantidade.GestureRecognizers.Add(clickBackground);
 
             box_corProduto.SetBinding(BoxView.ColorProperty, "CorProduto");
+
             l_nomeProduto.SetBinding(Label.TextProperty, "Descricao");
+            l_nomeProduto.SetBinding(Label.TextColorProperty, "CorFont");
+
             l_valor.SetBinding(Label.TextProperty, "Valor", stringFormat: "R${0}");
+            l_valor.SetBinding(Label.TextColorProperty, "CorFont");
+
             l_totalValor.SetBinding(Label.TextProperty, "Total", stringFormat: "Total R${0}");
+            l_totalValor.SetBinding(Label.TextColorProperty, "CorFont");
+
             l_quantidade.SetBinding(Label.TextProperty, "Quantidade", stringFormat: "Qtd {0}");
+            l_quantidade.SetBinding(Label.TextColorProperty, "CorFont");
+
             st_quantidade.SetBinding(Stepper.ValueProperty, "Quantidade");
 
             st_quantidade.ValueChanged += St_quantidade_ValueChanged;

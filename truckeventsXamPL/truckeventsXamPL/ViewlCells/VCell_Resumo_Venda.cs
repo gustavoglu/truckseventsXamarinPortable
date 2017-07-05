@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using truckeventsXamPL.Util;
 using Xamarin.Forms;
 
 namespace truckeventsXamPL.ViewlCells
@@ -16,9 +17,9 @@ namespace truckeventsXamPL.ViewlCells
 
         public VCell_Resumo_Venda()
         {
-            l_nomeProduto = new Label() { HorizontalOptions = LayoutOptions.StartAndExpand };
-            l_quantidadeProduto = new Label() { HorizontalOptions = LayoutOptions.EndAndExpand };
-            l_totalProduto = new Label() { HorizontalOptions = LayoutOptions.CenterAndExpand };
+            l_nomeProduto = new Label() { HorizontalOptions = LayoutOptions.StartAndExpand , TextColor = Constantes.ROXOPADRAO};
+            l_quantidadeProduto = new Label() { HorizontalOptions = LayoutOptions.EndAndExpand, TextColor = Constantes.ROXOPADRAO };
+            l_totalProduto = new Label() { HorizontalOptions = LayoutOptions.CenterAndExpand, TextColor = Constantes.ROXOPADRAO };
 
             l_nomeProduto.SetBinding(Label.TextProperty, "Descricao");
             l_quantidadeProduto.SetBinding(Label.TextProperty, "Quantidade", stringFormat:"Qtd {0}");

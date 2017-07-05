@@ -19,7 +19,7 @@ namespace truckeventsXamPL.Pages.Eventos
 
         StackLayout sl_principal;
         ListView listV_Eventos;
-
+        Loading_Layout loading;
 
         #endregion
 
@@ -27,24 +27,24 @@ namespace truckeventsXamPL.Pages.Eventos
 
         public Eventos_Page()
         {
-
-            this.SetValue(NavigationPage.BarBackgroundColorProperty, Constantes.ROXOPADRAO);
-
             this.Title = "Meus Eventos";
 
             #region Layout
-            listV_Eventos = new ListView() {  HasUnevenRows = true};
+            listV_Eventos = new ListView() { HasUnevenRows = true, SeparatorVisibility = SeparatorVisibility.None };
             listV_Eventos.ItemTemplate = new DataTemplate(typeof(VCell_Eventos));
             listV_Eventos.ItemsSource = Eventos;
 
 
             #endregion
 
+            loading = new Loading_Layout();
+
             Eventos = new ObservableCollection<Evento>();
 
             listV_Eventos.ItemTapped += ListV_Eventos_ItemTapped;
 
-            sl_principal = new StackLayout() {Padding = Constantes.PADDINGDEFAULT, Children = { listV_Eventos } };
+            sl_principal = new StackLayout() { Padding = Constantes.PADDINGDEFAULT, Children = { listV_Eventos } };
+
             this.Content = sl_principal;
 
 
@@ -55,7 +55,12 @@ namespace truckeventsXamPL.Pages.Eventos
 
         private async void ListV_Eventos_ItemTapped(object sender, ItemTappedEventArgs e)
         {
+            var listView = sender as ListView;
+
+            listView.SelectedItem = null;
+
             var evento = e.Item as Evento;
+
             if (evento != null)
             {
                 await App.Nav.PushAsync(new Evento_Vendas_Page(evento));
@@ -65,11 +70,21 @@ namespace truckeventsXamPL.Pages.Eventos
 
         private async void GetEventos()
         {
-            var eventos = await WSOpen.Get<List<Evento>>(Constantes.WS_EVENTOS);
+            List<Evento> eventos = null;
+
+            this.loading.Enable(this);
+
+            await Task.Factory.StartNew(async () =>
+            {
+                eventos = await WSOpen.Get<List<Evento>>(Constantes.WS_EVENTOS);
+            });
+
             if (eventos != null && eventos.Count > 0)
             {
                 this.listV_Eventos.ItemsSource = eventos;
             }
+
+            this.loading.Disable(this, sl_principal);
         }
     }
 }

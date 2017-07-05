@@ -48,16 +48,16 @@ namespace truckeventsXamPL.Pages.Vendas
             this._evento = _evento;
             this._venda_pagamento = new Venda_Pagamento();
 
-            l_totalVenda_h = new Label() { Text = "Total Venda: " };
-            l_totalVenda = new Label() { Text = string.Format("R$ {0}", venda.TotalVenda) };
+            l_totalVenda_h = new Label() { Text = "Total Venda: ", TextColor = Color.ForestGreen , FontAttributes = FontAttributes.Bold};
+            l_totalVenda = new Label() { Text = string.Format("R$ {0}", venda.TotalVenda), TextColor = Color.ForestGreen, FontAttributes = FontAttributes.Bold };
             e_troco = new Entry() { Keyboard = Keyboard.Numeric };
             l_troco = new Label() { Text = "Troco:" };
             l_trocoResultado = new Label() { Text = "0" };
             l_nomeCliente = new Label() { Text = "Nome Cliente:", HorizontalOptions = LayoutOptions.CenterAndExpand };
             e_nomeCliente = new Entry() { Placeholder = "ex: Pedro", HorizontalOptions = LayoutOptions.CenterAndExpand };
-            l_codigoFicha = new Label() { Text = "Cód. Ficha Pagamento: ", HorizontalTextAlignment = TextAlignment.Center };
-            e_codigoFicha = new Entry() { Placeholder = "00000", Keyboard = Keyboard.Numeric };
-            b_adicionarFicha = new Button() { Text = "Adicionar" };
+            l_codigoFicha = new Label() { Text = "Cód. Ficha Pagamento: ", HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Center };
+            e_codigoFicha = new Entry() { Placeholder = "00000", Keyboard = Keyboard.Numeric, MinimumWidthRequest = 150 , TextColor = Color.ForestGreen};
+            b_adicionarFicha = new Button() { Text = "Adicionar Ficha", HorizontalOptions = LayoutOptions.FillAndExpand, TextColor = Color.White, BackgroundColor = Color.ForestGreen };
 
             fichasValor = new ObservableCollection<FichaValorViewModel>();
 
@@ -66,7 +66,7 @@ namespace truckeventsXamPL.Pages.Vendas
             listV_venda_pagamento_fichas.ItemsSource = fichasValor;
             listV_venda_pagamento_fichas.ItemTapped += ListV_venda_pagamento_fichas_ItemTapped;
 
-            listV_produtosEscolhidos = new ListView();
+            listV_produtosEscolhidos = new ListView() { HasUnevenRows = true, SeparatorColor = Constantes.ROXOESCURO };
             listV_produtosEscolhidos.ItemTemplate = new DataTemplate(typeof(VCell_Resumo_Venda));
             listV_produtosEscolhidos.ItemsSource = from venda_produto in _venda.Venda_Produtos
                                                    select new { Descricao = venda_produto.Produto.Descricao, Quantidade = venda_produto.Quantidade, Total = venda_produto.Total };
@@ -74,11 +74,11 @@ namespace truckeventsXamPL.Pages.Vendas
             toolbar_confirmar = new ToolbarItem("Confirmar", "", Confirmar, ToolbarItemOrder.Default);
             toolbar_cancelar = new ToolbarItem("Cancelar", "", Cancelar, ToolbarItemOrder.Default);
 
-            sl_hori_1 = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = { l_codigoFicha, e_codigoFicha, b_adicionarFicha } };
+            sl_hori_1 = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = { l_codigoFicha, e_codigoFicha } };
             sl_hori_2 = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = { l_totalVenda_h, l_totalVenda } };
             sl_hori_3 = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.CenterAndExpand, Children = { l_troco, e_troco, l_trocoResultado } };
 
-            sl_principal = new StackLayout() { Padding = Constantes.PADDINGDEFAULT, Children = { sl_hori_2, listV_produtosEscolhidos, sl_hori_1, listV_venda_pagamento_fichas } };
+            sl_principal = new StackLayout() { Padding = Constantes.PADDINGDEFAULT, Children = { sl_hori_2, listV_produtosEscolhidos, sl_hori_1, b_adicionarFicha, listV_venda_pagamento_fichas } };
 
             this.ToolbarItems.Add(toolbar_cancelar);
             this.ToolbarItems.Add(toolbar_confirmar);

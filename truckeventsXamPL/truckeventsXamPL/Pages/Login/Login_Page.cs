@@ -37,8 +37,8 @@ namespace truckeventsXamPL.Pages.Login
             e_senha = new Entry { Text = "loja123", Placeholder = "Senha", WidthRequest = 200, IsPassword = true, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, TextColor = Color.White };
             l_email = new Label { Text = "E-mail", WidthRequest = 200, HorizontalTextAlignment = TextAlignment.Start, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, TextColor = Color.White };
             l_senha = new Label { Text = "Senha", WidthRequest = 200, HorizontalTextAlignment = TextAlignment.Start, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, TextColor = Color.White };
-            b_confirmar = new Button { Text = "Login", WidthRequest = 200, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, BackgroundColor = Constantes.ROXOPADRAO, TextColor = Color.White};
-            indicator = new ActivityIndicator() { Color = Constantes.ROXOPADRAO, IsRunning = false, IsVisible = false};
+            b_confirmar = new Button { Text = "Login", WidthRequest = 200, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, BackgroundColor = Constantes.ROXOPADRAO, TextColor = Color.White };
+            indicator = new ActivityIndicator() { Color = Constantes.ROXOPADRAO, IsRunning = false, IsVisible = false };
 
             #endregion
 
@@ -50,22 +50,26 @@ namespace truckeventsXamPL.Pages.Login
 
         }
 
-        private void B_confirmar_Clicked(object sender, EventArgs e)
+        private async void B_confirmar_Clicked(object sender, EventArgs e)
         {
-            Utilidades.EnableControlButton(ref b_confirmar, false);
+            DisableViews();
 
-            Utilidades.IndicatorControl(ref indicator, true);
+            await Login();
 
-            Login();
+            enableViews();
+            //Utilidades.EnableControlButton(b_confirmar, true);
 
+            //Utilidades.IndicatorControl(ref indicator, false);
         }
 
-        private async void Login()
+        private async Task Login()
         {
-
-            var token = await WSOpen.GetLogin(new Models.Login() { UserName = e_email.Text, Password = e_senha.Text });
-
-            if (token!= null)
+            Token token = null;
+            await Task.Factory.StartNew(async () =>
+            {
+                token = await WSOpen.GetLogin(new Models.Login() { UserName = e_email.Text, Password = e_senha.Text });
+            });
+            if (token != null)
             {
                 Constantes.Token = token;
 
@@ -76,12 +80,19 @@ namespace truckeventsXamPL.Pages.Login
             {
                 await DisplayAlert("", "Erro", "Ok");
             }
+        }
 
-            Utilidades.EnableControlButton(ref b_confirmar, true);
 
+        private void enableViews()
+        {
+            Utilidades.EnableControlButton(b_confirmar, true);
             Utilidades.IndicatorControl(ref indicator, false);
+        }
 
-
+        private void DisableViews()
+        {
+            Utilidades.EnableControlButton(b_confirmar, false);
+            Utilidades.IndicatorControl(ref indicator, true);
         }
     }
 }

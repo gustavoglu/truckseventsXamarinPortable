@@ -25,6 +25,8 @@ namespace truckeventsXamPL.Util
 
         public static Color ROXOPADRAO = Color.FromHex("#6730cd");
 
+        public static Color ROXOESCURO = Color.FromHex("#531db8");
+
         #endregion
 
 
@@ -44,8 +46,8 @@ namespace truckeventsXamPL.Util
 
         #region Icones
 
-        public static IconLabel ICON_ORGANIZADOR = new IconLabel() {Text = "fa-handshake-o", ClassId = "fa-handshake-o" };
-        public static IconLabel ICON_LOJA = new IconLabel() {Text = "users", ClassId = "users" };
+        //public static IconLabel ICON_ORGANIZADOR = new IconLabel() {Text = "fa-handshake-o", ClassId = "fa-handshake-o" };
+        //public static IconLabel ICON_LOJA = new IconLabel() {Text = "users", ClassId = "users" };
 
 
         #endregion

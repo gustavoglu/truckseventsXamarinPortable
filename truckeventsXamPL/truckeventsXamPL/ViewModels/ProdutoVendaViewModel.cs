@@ -45,9 +45,18 @@ namespace truckeventsXamPL.ViewModels
 
         public Color CorBackground
         {
-            get { return quantidade > 0 ? Constantes.VERDESELECAO : Color.Transparent; }
+            get { return quantidade > 0 ? Constantes.ROXOPADRAO : Color.Transparent; }
             set { corBackground = value; this.Notify(nameof(CorBackground)); }
         }
+
+        private Color corFont;
+
+        public Color CorFont
+        {
+            get { return quantidade > 0 ? Color.White : Constantes.ROXOPADRAO; }
+            set { corFont = value; Notify(nameof(this.CorFont)); }
+        }
+
 
         private int quantidade;
 
@@ -60,6 +69,7 @@ namespace truckeventsXamPL.ViewModels
                 Notify(nameof(this.Quantidade));
                 Notify(nameof(this.Total));
                 Notify(nameof(this.CorBackground));
+                Notify(nameof(this.CorFont));
             }
         }
 

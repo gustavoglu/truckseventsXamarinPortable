@@ -16,7 +16,7 @@ namespace truckeventsXamPL
         public App()
         {
             InitializeComponent();
-            Nav = new NavigationPage(new Login_Page()) { BarBackgroundColor = Constantes.ROXOPADRAO, BarTextColor = Color.White };
+            Nav = new NavigationPage(new Login_Page()){ BarBackgroundColor = Constantes.ROXOPADRAO, BarTextColor = Color.White };
             MainPage = Nav;
         }
 

@@ -53,7 +53,7 @@ namespace truckeventsXamPL.Util
             }
         }
 
-        public static void EnableControlButton(ref Button button, bool enable)
+        public static void EnableControlButton(Button button, bool enable)
         {
             if (enable)
             {

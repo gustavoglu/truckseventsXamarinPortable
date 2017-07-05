@@ -1,10 +1,9 @@
 ﻿{
   "dependencies": {
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.3.3",
     "Rg.Plugins.Popup": "1.0.4",
     "Xam.FormsPlugin.Iconize": "1.5.0.13-beta",
-    "Xam.Plugin.Iconize": "1.5.0.13-beta",
-    "Xam.Plugin.Iconize.FontAwesome": "1.5.0.13-beta",
+    "Xam.Plugin.Iconize": "2.0.0.29-beta",
     "Xamarin.Forms": "2.3.4.224"
   },
   "frameworks": {

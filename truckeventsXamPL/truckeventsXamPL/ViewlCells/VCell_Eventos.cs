@@ -23,10 +23,10 @@ namespace truckeventsXamPL.ViewlCells
         public VCell_Eventos()
         {
 
-            frame = new Frame() {  HasShadow = true, OutlineColor = Constantes.ROXOPADRAO , Margin = 5};
+            frame = new Frame() {  HasShadow = true, BackgroundColor = Constantes.ROXOPADRAO , Margin = 5};
 
-            l_descricaoEvento = new Label() { HorizontalOptions = LayoutOptions.CenterAndExpand , TextColor = Constantes.ROXOPADRAO};
-            l_dataEvento = new Label() { HorizontalOptions = LayoutOptions.StartAndExpand, TextColor = Constantes.ROXOPADRAO };
+            l_descricaoEvento = new Label() { HorizontalOptions = LayoutOptions.CenterAndExpand, TextColor = Color.White};
+            l_dataEvento = new Label() { HorizontalOptions = LayoutOptions.StartAndExpand, TextColor = Color.White };
             l_descricaoEvento.SetBinding(Label.TextProperty, "Descricao");
 
 
