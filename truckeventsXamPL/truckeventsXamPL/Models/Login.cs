@@ -8,10 +8,9 @@ namespace truckeventsXamPL.Models
 {
     public class Login
     {
-        public string UserName { get; set; }
+        public string Email { get; set; }
 
-        public string Password { get; set; }
+        public string Senha { get; set; }
 
-        public string Grant_Type { get; set; }
     }
 }

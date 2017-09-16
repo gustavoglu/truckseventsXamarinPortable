@@ -153,7 +153,7 @@ namespace truckeventsXamPL.Pages.Vendas
 
             await Task.Factory.StartNew(async () =>
             {
-                ficha = await WSOpen.Get<Ficha>(string.Format("{0}?id_evento={1}&codigo={2}", Constantes.WS_FICHAS, _evento.Id, codigo));
+                //ficha = await WSOpen.Get<Ficha>(string.Format("{0}?id_evento={1}&codigo={2}", Constantes.WS_FICHAS, _evento.Id, codigo));
             });
 
             if (ficha == null)

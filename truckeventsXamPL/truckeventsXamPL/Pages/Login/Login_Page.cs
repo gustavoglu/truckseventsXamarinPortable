@@ -1,6 +1,7 @@
 ﻿using Rg.Plugins.Popup.Extensions;
 using Rg.Plugins.Popup.Services;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using truckeventsXamPL.Models;
 using truckeventsXamPL.Pages.Eventos;
@@ -33,8 +34,8 @@ namespace truckeventsXamPL.Pages.Login
             NavigationPage.SetHasNavigationBar(this, false);
 
             img_logo = new Image { VerticalOptions = LayoutOptions.CenterAndExpand, HorizontalOptions = LayoutOptions.CenterAndExpand, Source = ImageSource.FromResource("truckeventsXamPL.Img.logo1x.png") };
-            e_email = new Entry { Text = "loja@hotmail.com", WidthRequest = 200, Placeholder = "E-mail", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, TextColor = Color.White };
-            e_senha = new Entry { Text = "loja123", Placeholder = "Senha", WidthRequest = 200, IsPassword = true, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, TextColor = Color.White };
+            e_email = new Entry { Text = "loja4", WidthRequest = 200, Placeholder = "E-mail", VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, TextColor = Color.White };
+            e_senha = new Entry { Text = "l123456", Placeholder = "Senha", WidthRequest = 200, IsPassword = true, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, TextColor = Color.White };
             l_email = new Label { Text = "E-mail", WidthRequest = 200, HorizontalTextAlignment = TextAlignment.Start, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, TextColor = Color.White };
             l_senha = new Label { Text = "Senha", WidthRequest = 200, HorizontalTextAlignment = TextAlignment.Start, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, TextColor = Color.White };
             b_confirmar = new Button { Text = "Login", WidthRequest = 200, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, BackgroundColor = Constantes.ROXOPADRAO, TextColor = Color.White };
@@ -64,22 +65,20 @@ namespace truckeventsXamPL.Pages.Login
 
         private async Task Login()
         {
-            Token token = null;
+            object result = null;
             await Task.Factory.StartNew(async () =>
             {
-                token = await WSOpen.GetLogin(new Models.Login() { UserName = e_email.Text, Password = e_senha.Text });
+                result = await WSOpen.GetLogin(new Models.Login() { Email = e_email.Text, Senha = e_senha.Text });
             });
-            if (token != null)
-            {
-                Constantes.Token = token;
 
-                await App.Nav.Navigation.PushAsync(new Eventos_Page());
-
-            }
-            else
+            if (result.GetType() == typeof(string))
             {
-                await DisplayAlert("", "Erro", "Ok");
+                await DisplayAlert("", (string)result, "Ok");
+                return;
             }
+
+            Constantes.Token = (Token)result;
+            await App.Nav.Navigation.PushAsync(new Eventos_Page(Constantes.Token.EventoPrincipal));
         }
 
 

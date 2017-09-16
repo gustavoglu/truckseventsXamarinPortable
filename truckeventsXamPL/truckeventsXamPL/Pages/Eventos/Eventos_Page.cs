@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using truckeventsXamPL.Models;
 using truckeventsXamPL.Util;
-using truckeventsXamPL.ViewlCells;
 using truckeventsXamPL.WS;
 using Xamarin.Forms;
 
@@ -18,22 +14,23 @@ namespace truckeventsXamPL.Pages.Eventos
         #region Layout
 
         StackLayout sl_principal;
-        ListView listV_Eventos;
+        Label l_totalVendas;
+        Label l_totalVendas_h;
         Loading_Layout loading;
-
         #endregion
 
         ObservableCollection<Evento> Eventos;
-
-        public Eventos_Page()
+        Evento _evento;
+        public Eventos_Page(Evento evento)
         {
-            this.Title = "Meus Eventos";
+            _evento = evento;
 
+            this.Title = $"Evento {_evento.Descricao}";
             #region Layout
-            listV_Eventos = new ListView() { HasUnevenRows = true, SeparatorVisibility = SeparatorVisibility.None };
-            listV_Eventos.ItemTemplate = new DataTemplate(typeof(VCell_Eventos));
-            listV_Eventos.ItemsSource = Eventos;
-
+            l_totalVendas_h = new Label { Text = "Total Vendas", HorizontalOptions = LayoutOptions.Center };
+            l_totalVendas = new Label { Text = "0", FontAttributes = FontAttributes.Bold, HorizontalOptions = LayoutOptions.CenterAndExpand, VerticalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Center };
+            l_totalVendas.FontSize = Device.GetNamedSize(NamedSize.Large, l_totalVendas);
+            l_totalVendas_h.FontSize = Device.GetNamedSize(NamedSize.Medium, l_totalVendas);
 
             #endregion
 
@@ -41,15 +38,12 @@ namespace truckeventsXamPL.Pages.Eventos
 
             Eventos = new ObservableCollection<Evento>();
 
-            listV_Eventos.ItemTapped += ListV_Eventos_ItemTapped;
 
-            sl_principal = new StackLayout() { Padding = Constantes.PADDINGDEFAULT, Children = { listV_Eventos } };
+            sl_principal = new StackLayout() { Padding = Constantes.PADDINGDEFAULT, Children = { l_totalVendas_h, l_totalVendas } };
 
             this.Content = sl_principal;
 
-
-            GetEventos();
-
+            GetTotalVendas();
 
         }
 
@@ -68,23 +62,45 @@ namespace truckeventsXamPL.Pages.Eventos
         }
 
 
-        private async void GetEventos()
+        private async void GetTotalVendas()
         {
-            List<Evento> eventos = null;
+            string uri = $"{Constantes.WS_VENDAS}/Total/Loja/{Constantes.Token.Id_usuario}/Evento/{_evento.Id}";
+            var result = await WSOpen.Get(uri);
+            if (result.GetType() == typeof(string)) { await DisplayAlert("Erro", (string)result, "Ok"); }
+            double total = 0;
+            if (double.TryParse(result.ToString(), out total)) l_totalVendas.Text = total.ToString("#.##");//total.ToString(); 
+           // await TotalAnimacao(500.00);
+        }
 
-            this.loading.Enable(this);
-
-            await Task.Factory.StartNew(async () =>
+        private async Task TotalAnimacao(double total)
+        {
+            double numeracao = 0.00;
+            while (numeracao < total)
             {
-                eventos = await WSOpen.Get<List<Evento>>(Constantes.WS_EVENTOS);
-            });
-
-            if (eventos != null && eventos.Count > 0)
-            {
-                this.listV_Eventos.ItemsSource = eventos;
+                l_totalVendas.Text = numeracao.ToString("#.##");
+                numeracao = numeracao + 0.01 ;
+                await Task.Delay(1);
             }
 
-            this.loading.Disable(this, sl_principal);
+        }
+
+        private async void GetEventos()
+        {
+            //List<Evento> eventos = null;
+
+            //this.loading.Enable(this);
+
+            //await Task.Factory.StartNew(async () =>
+            //{
+            //    eventos = await WSOpen.Get<List<Evento>>(Constantes.WS_EVENTOS);
+            //});
+
+            //if (eventos != null && eventos.Count > 0)
+            //{
+            //    this.listV_Eventos.ItemsSource = eventos;
+            //}
+
+            //this.loading.Disable(this, sl_principal);
         }
     }
 }

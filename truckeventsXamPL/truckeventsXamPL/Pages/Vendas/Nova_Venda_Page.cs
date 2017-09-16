@@ -145,7 +145,7 @@ namespace truckeventsXamPL.Pages.Vendas
 
             await Task.Factory.StartNew(async () =>
             {
-                produtos = await WSOpen.Get<List<Produto>>(Constantes.WS_PRODUTOS);
+               // produtos = await WSOpen.Get<List<Produto>>(Constantes.WS_PRODUTOS);
             });
 
             if (produtos != null && produtos.Count > 0)

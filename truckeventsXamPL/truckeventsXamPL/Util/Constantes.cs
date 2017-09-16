@@ -28,17 +28,17 @@ namespace truckeventsXamPL.Util
         public static Color ROXOESCURO = Color.FromHex("#531db8");
 
         #endregion
-
+    
 
         #region WS
-        public const string WS_HMLAZURE = "http://truckevents.azurewebsites.net";
-        public const string WS_HMLLOCAL = "http://localhost:50262";
-        public const string WS_SERVER = "http://truckevents.azurewebsites.net";
-        public static string WS_URILOGINTOKEN = WS_SERVER + "/Token";
+        public const string WS_HMLAZURE = "http://eventosproject.azurewebsites.net/api/";
+        public const string WS_HMLLOCAL = "http://localhost:51948/api/";
+        public const string WS_SERVER = "http://localhost:51948/api/";
+        public static string WS_URILOGINTOKEN = WS_SERVER + "Contas/Login";
         public const string WS_REGISTRO = WS_SERVER + "/api/Account/Register";
         public const string WS_PRODUTOS = WS_SERVER + "/api/produtos";
         public const string WS_EVENTOS = WS_SERVER + "/api/eventos";
-        public const string WS_VENDAS = WS_SERVER + "/api/vendas";
+        public const string WS_VENDAS = WS_SERVER + "vendas";
         public const string WS_FICHAS = WS_SERVER + "/api/fichas";
         public const string WS_VENDAS_EVENTO = WS_SERVER + "/api/vendas/evento";
 

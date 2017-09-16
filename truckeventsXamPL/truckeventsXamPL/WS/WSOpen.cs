@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,60 +14,56 @@ namespace truckeventsXamPL.WS
 {
     public class WSOpen
     {
-        public static async Task<Token> GetLogin(Login login)
+        public static async Task<object> GetLogin(Login login)
         {
             HttpClient client = new HttpClient();
-
-            var send = string.Format("grant_type=password&username={0}&password={1}", login.UserName, login.Password);
-            var content = new StringContent(send, Encoding.UTF8, "application/text");
-            var result = client.PostAsync(Constantes.WS_URILOGINTOKEN, content).Result;
-
-            if (result.IsSuccessStatusCode)
+            string loginSend = JsonConvert.SerializeObject(login);
+            var content = new StringContent(loginSend, Encoding.UTF8, "application/json");
+            try
             {
-                var contentToken = await result.Content.ReadAsStringAsync();
-                Token token = JsonConvert.DeserializeObject<Token>(contentToken);
+                var result = client.PostAsync(Constantes.WS_URILOGINTOKEN, content).Result;
+                var contentResponse = await result.Content.ReadAsStringAsync();
+                if (!result.IsSuccessStatusCode) return contentResponse;
 
-                if (token != null)
-                {
-                    return token;
-                }
-                else
-                {
-                    return null;
-                }
+                dynamic data = JObject.Parse(contentResponse);
+                dynamic resultToken = data.data.result;
+
+
+                Token token = JsonConvert.DeserializeObject<Token>(resultToken.ToString());
+                if (token == null) return contentResponse;
+
+                return token;
             }
-            else
+            catch (Exception e)
             {
-                return null;
+                return e.Message;
             }
+
         }
 
-        public static async Task<T> Get<T>(string uri) where T : class
+
+        public static async Task<object> Get(string uri)
         {
             HttpClient client = new HttpClient();
 
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Constantes.Token.access_token);
 
-            var result = client.GetAsync(uri).Result;
-
-            var obj = await result.Content.ReadAsStringAsync();
-
-            if (result.IsSuccessStatusCode)
+            try
             {
+                var result = client.GetAsync(uri).Result;
 
-                var objDes = JsonConvert.DeserializeObject<T>(obj);
+                var obj = await result.Content.ReadAsStringAsync();
 
-                if (objDes != null)
-                {
-                    return objDes;
-                }
-                else
-                {
-                    return null;
-                }
+                if (!result.IsSuccessStatusCode) return obj;
+
+                var objDes = JsonConvert.DeserializeObject(obj);
+
+                return objDes;
             }
-
-            return null;
+            catch (Exception e)
+            {
+                return e.Message;
+            }
 
         }
 

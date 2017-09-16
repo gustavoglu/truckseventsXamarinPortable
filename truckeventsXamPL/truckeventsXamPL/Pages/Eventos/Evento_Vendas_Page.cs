@@ -81,13 +81,8 @@ namespace truckeventsXamPL.Pages.Eventos
 
         private void populaVendas()
         {
-            if (_evento.Vendas != null && _evento.Vendas.Count > 0)
-            {
-                foreach (var venda in _evento.Vendas)
-                {
-                    Vendas.Add(new VendaViewModel(venda));
-                }
-            }
+            
+            
         }
 
         private async void getVendas()
@@ -100,7 +95,7 @@ namespace truckeventsXamPL.Pages.Eventos
 
             await Task.Factory.StartNew(async () =>
             {
-                vendas = await WSOpen.Get<List<Venda>>(uri);
+               // vendas = await WSOpen.Get<List<Venda>>(uri);
             });
 
             if (vendas != null && vendas.Count > 0)
