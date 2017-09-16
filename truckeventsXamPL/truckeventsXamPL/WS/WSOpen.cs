@@ -42,7 +42,7 @@ namespace truckeventsXamPL.WS
         }
 
 
-        public static async Task<object> Get(string uri)
+        public static async Task<object> Get<T>(string uri)
         {
             HttpClient client = new HttpClient();
 
@@ -56,7 +56,7 @@ namespace truckeventsXamPL.WS
 
                 if (!result.IsSuccessStatusCode) return obj;
 
-                var objDes = JsonConvert.DeserializeObject(obj);
+                var objDes = JsonConvert.DeserializeObject<T>(obj);
 
                 return objDes;
             }

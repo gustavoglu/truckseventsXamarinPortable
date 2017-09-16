@@ -1,27 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using truckeventsXamPL.Models;
 
 namespace truckeventsXamPL.ViewModels
 {
     public class FichaValorViewModel : INotifyPropertyChanged
     {
-        public Venda_Pagamento_Ficha _venda_Pagamento_Ficha;
+        private Pagamento_Ficha _pagamento_Ficha;
 
-        public FichaValorViewModel(Venda_Pagamento_Ficha venda_Pagamento_Ficha)
+        public FichaValorViewModel(Pagamento_Ficha pagamento_Ficha)
         {
-            this._venda_Pagamento_Ficha = venda_Pagamento_Ficha;
+            this._pagamento_Ficha = pagamento_Ficha;
         }
 
         private string codFicha;
 
         public string CodFicha
         {
-            get { return _venda_Pagamento_Ficha.Ficha.Codigo; }
+            get { return _pagamento_Ficha.Ficha.Codigo; }
             set { codFicha = value; Notify(nameof(this.CodFicha)); }
         }
 
@@ -29,7 +24,7 @@ namespace truckeventsXamPL.ViewModels
 
         public string Cliente
         {
-            get { return _venda_Pagamento_Ficha.Ficha.NomeCliente; }
+            get { return _pagamento_Ficha.Ficha.NomeCliente; }
             set { cliente = value; Notify(nameof(this.Cliente)); }
         }
 
@@ -37,19 +32,11 @@ namespace truckeventsXamPL.ViewModels
 
         public double Saldo
         {
-            get { return _venda_Pagamento_Ficha.Ficha.Saldo.Value; }
+            get { return _pagamento_Ficha.Ficha.Saldo.Value; }
             set { saldo = value; Notify(nameof(this.Saldo)); }
         }
 
-        private double valor;
-
         public event PropertyChangedEventHandler PropertyChanged;
-
-        public double Valor
-        {
-            get { return _venda_Pagamento_Ficha.ValorInformado; }
-            set { _venda_Pagamento_Ficha.ValorInformado = value; Notify(nameof(this.Valor)); }
-        }
 
         private void Notify(string propertyName)
         {
@@ -59,7 +46,7 @@ namespace truckeventsXamPL.ViewModels
             }
         }
 
-
+        public Pagamento_Ficha Pagamento_Ficha { get { return _pagamento_Ficha; } set { _pagamento_Ficha = value; } }
 
     }
 }

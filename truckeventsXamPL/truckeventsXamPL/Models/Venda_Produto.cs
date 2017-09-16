@@ -1,26 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace truckeventsXamPL.Models
 {
     public class Venda_Produto : BaseEntity
     {
-        public Guid? Id_produto { get; set; }
+        public Guid Id_venda { get; set; }
 
-        public Guid? Id_Venda { get; set; }
+        public Guid Id_produto { get; set; }
 
-        public int? Quantidade { get; set; }
+        public int Quantidade { get; set; }
 
-        public double? Total { get; set; }
+        public double ValorTotal { get; set; }
 
-        public virtual Produto Produto { get; set; } = null;
-
-        public virtual Venda Venda { get; set; } = null;
-
-        public virtual ICollection<Venda_Produto_Variacao> Venda_Produto_Variacoes { get; set; }
-
+        public virtual Produto Produto { get; set; }
     }
 }

@@ -78,7 +78,7 @@ namespace truckeventsXamPL.Pages.Login
             }
 
             Constantes.Token = (Token)result;
-            await App.Nav.Navigation.PushAsync(new Eventos_Page(Constantes.Token.EventoPrincipal));
+            await App.Nav.Navigation.PushAsync(new Evento_Vendas_Page(Constantes.Token.EventoPrincipal));
         }
 
 

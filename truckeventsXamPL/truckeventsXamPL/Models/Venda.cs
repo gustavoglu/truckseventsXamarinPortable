@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace truckeventsXamPL.Models
 {
@@ -10,24 +7,20 @@ namespace truckeventsXamPL.Models
     {
         public Venda()
         {
-            Venda_Pagamentos = new List<Venda_Pagamento>();
             Venda_Produtos = new List<Venda_Produto>();
         }
-        public DateTime? Data { get; set; }
 
-        public double? TotalVenda { get; set; }
+        public DateTime Data { get; set; }
 
-        public double? Troco { get; set; }
+        public bool Cancelada { get; set; } = false;
 
-        public string NomeCliente { get; set; } = null;
+        public double? Total { get; set; } = 0;
 
-        public bool Cancelada { get; set; }
+        public Guid Id_loja { get; set; }
 
-        public Guid? Id_evento { get; set; }
+        public Guid Id_Evento { get; set; }
 
-        public virtual Evento Evento { get; set; } = null;
-
-        public virtual ICollection<Venda_Pagamento> Venda_Pagamentos { get; set; }
+        public virtual Pagamento Pagamento { get; set; }
 
         public virtual ICollection<Venda_Produto> Venda_Produtos { get; set; }
     }

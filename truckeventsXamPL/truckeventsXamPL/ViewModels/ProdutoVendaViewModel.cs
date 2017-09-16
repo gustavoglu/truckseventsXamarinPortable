@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using truckeventsXamPL.Models;
 using truckeventsXamPL.Util;
 using Xamarin.Forms;
@@ -13,7 +9,7 @@ namespace truckeventsXamPL.ViewModels
     public class ProdutoVendaViewModel : INotifyPropertyChanged
     {
 
-        public Produto _produto { get; set; }
+        private Produto _produto;
 
         public ProdutoVendaViewModel(Produto produto)
         {
@@ -38,7 +34,7 @@ namespace truckeventsXamPL.ViewModels
 
         public Color CorProduto
         {
-            get { return Color.FromHex(_produto.Produto_Cor.Cor); }
+            get { return Color.FromHex(_produto.Cor?.CorFromHex ?? "0000"); }
         }
 
         private Color corBackground;
@@ -77,7 +73,7 @@ namespace truckeventsXamPL.ViewModels
 
         public double? Valor
         {
-            get { return _produto.Valor; }
+            get { return _produto.Preco; }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -89,5 +85,7 @@ namespace truckeventsXamPL.ViewModels
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+        public Produto Produto { get { return this._produto; } set { _produto = value; } }
     }
 }

@@ -50,7 +50,7 @@ namespace truckeventsXamPL.Pages.Vendas
             this._venda_pagamento = new Venda_Pagamento();
 
             l_totalVenda_h = new Label() { Text = "Total Venda: ", TextColor = Color.ForestGreen, FontAttributes = FontAttributes.Bold };
-            l_totalVenda = new Label() { Text = string.Format("R$ {0}", venda.TotalVenda), TextColor = Color.ForestGreen, FontAttributes = FontAttributes.Bold };
+            l_totalVenda = new Label() { Text = string.Format("R$ {0}", venda.Total), TextColor = Color.ForestGreen, FontAttributes = FontAttributes.Bold };
             e_troco = new Entry() { Keyboard = Keyboard.Numeric };
             l_troco = new Label() { Text = "Troco:" };
             l_trocoResultado = new Label() { Text = "0" };
@@ -69,8 +69,9 @@ namespace truckeventsXamPL.Pages.Vendas
 
             listV_produtosEscolhidos = new ListView() { HasUnevenRows = true, SeparatorColor = Constantes.ROXOESCURO };
             listV_produtosEscolhidos.ItemTemplate = new DataTemplate(typeof(VCell_Resumo_Venda));
+
             listV_produtosEscolhidos.ItemsSource = from venda_produto in _venda.Venda_Produtos
-                                                   select new { Descricao = venda_produto.Produto.Descricao, Quantidade = venda_produto.Quantidade, Total = venda_produto.Total };
+                                                   select new { Descricao = venda_produto.Produto.Descricao, Quantidade = venda_produto.Quantidade, Total = venda_produto.ValorTotal };
 
             toolbar_confirmar = new ToolbarItem("Confirmar", "", Confirmar, ToolbarItemOrder.Default);
             toolbar_cancelar = new ToolbarItem("Cancelar", "", Cancelar, ToolbarItemOrder.Default);
@@ -101,25 +102,23 @@ namespace truckeventsXamPL.Pages.Vendas
         {
             string codigoFicha = e_codigoFicha.Text;
 
-            if (ValidaCampoFicha(codigoFicha))
+            if (!ValidaCampoFicha(codigoFicha)) return;
+
+            Ficha ficha = null;
+
+            ficha = await getFicha(codigoFicha);
+
+            if (ficha == null) return;
+
+            if (fichasValor.ToList().Exists(f => f.Pagamento_Ficha.Ficha.Codigo == ficha.Codigo))
             {
-                Ficha ficha = null;
-
-                ficha = await getFicha(codigoFicha);
-
-                if (ficha != null)
-                {
-                    if (fichasValor.ToList().Exists(f => f._venda_Pagamento_Ficha.Ficha.Codigo == ficha.Codigo))
-                    {
-                        Utilidades.DialogMessage("Esta Ficha ja foi adicionada a lista de pagamentos! ");
-                    }
-                    else
-                    {
-                        fichasValor.Add(new FichaValorViewModel(new Venda_Pagamento_Ficha() { Id_Ficha = ficha.Id, Ficha = ficha }));
-                    }
-                }
+                Utilidades.DialogMessage("Esta Ficha ja foi adicionada a lista de pagamentos!");
+                return;
             }
+
+            fichasValor.Add(new FichaValorViewModel(new Pagamento_Ficha { Id_ficha = ficha.Id.Value, Ficha = ficha }));
         }
+
 
         private void Cancelar()
         {
@@ -129,11 +128,11 @@ namespace truckeventsXamPL.Pages.Vendas
         private async void Confirmar()
         {
 
-            AdicionaVenda_Pagamento_Fichas(_venda);
+            AdicionaPagamento(_venda);
 
             if (ValidaVenda())
             {
-                _venda.Id_evento = _evento.Id.Value;
+                _venda.Id_Evento = _evento.Id.Value;
                 var result = await WSOpen.Post(Constantes.WS_VENDAS, _venda);
 
                 if (result != null)
@@ -153,8 +152,8 @@ namespace truckeventsXamPL.Pages.Vendas
 
             await Task.Factory.StartNew(async () =>
             {
-                //ficha = await WSOpen.Get<Ficha>(string.Format("{0}?id_evento={1}&codigo={2}", Constantes.WS_FICHAS, _evento.Id, codigo));
-            });
+            //ficha = await WSOpen.Get<Ficha>(string.Format("{0}?id_evento={1}&codigo={2}", Constantes.WS_FICHAS, _evento.Id, codigo));
+        });
 
             if (ficha == null)
             {
@@ -168,7 +167,7 @@ namespace truckeventsXamPL.Pages.Vendas
 
             enableFichaViews();
 
-            return ficha ;
+            return ficha;
 
         }
 
@@ -203,7 +202,7 @@ namespace truckeventsXamPL.Pages.Vendas
         {
 
             var fichas = from fichaValor in fichasValor
-                         select fichaValor._venda_Pagamento_Ficha.Ficha;
+                         select fichaValor.Pagamento_Ficha.Ficha;
 
             // Total Saldo das Fichas
             var valorTotalFichas = fichas.Sum(f => f.Saldo).Value;
@@ -211,7 +210,7 @@ namespace truckeventsXamPL.Pages.Vendas
             // Total de Valor Pré informado
             var valorTotalInfoFichas = _venda_pagamento.Venda_Pagamento_Fichas.Sum(p => p.ValorInformado);
 
-            double valorTotalVenda = _venda.TotalVenda.Value;
+            double valorTotalVenda = _venda.Total.Value;
 
             var countFichas = fichas.ToList().Count;
 
@@ -259,20 +258,17 @@ namespace truckeventsXamPL.Pages.Vendas
 
         }
 
-        private void AdicionaVenda_Pagamento_Fichas(Venda venda)
+        private void AdicionaPagamento(Venda venda)
         {
-            if (!venda.Venda_Pagamentos.Any())
+            Pagamento pagamento = new Pagamento();
+
+            foreach (var pagamento_fichaViewModel in fichasValor)
             {
-
-                _venda_pagamento = new Venda_Pagamento();
-
-                foreach (var venda_Pagamento_Ficha in fichasValor)
-                {
-                    _venda_pagamento.Venda_Pagamento_Fichas.Add(venda_Pagamento_Ficha._venda_Pagamento_Ficha);
-                }
-
-                venda.Venda_Pagamentos.Add(this._venda_pagamento);
+                pagamento.Pagamento_Fichas.Add(pagamento_fichaViewModel.Pagamento_Ficha);
             }
+
+            venda.Pagamento = pagamento;
         }
     }
 }
+

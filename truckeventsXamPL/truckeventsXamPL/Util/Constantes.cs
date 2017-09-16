@@ -1,11 +1,4 @@
-﻿using FormsPlugin.Iconize;
-using Plugin.Iconize;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using truckeventsXamPL.Models;
+﻿using truckeventsXamPL.Models;
 using Xamarin.Forms;
 
 namespace truckeventsXamPL.Util
@@ -32,11 +25,11 @@ namespace truckeventsXamPL.Util
 
         #region WS
         public const string WS_HMLAZURE = "http://eventosproject.azurewebsites.net/api/";
-        public const string WS_HMLLOCAL = "http://localhost:51948/api/";
-        public const string WS_SERVER = "http://localhost:51948/api/";
+        public const string WS_HMLLOCAL = "http://localhost:51949/api/";
+        public const string WS_SERVER = "http://localhost:51949/api/";
         public static string WS_URILOGINTOKEN = WS_SERVER + "Contas/Login";
         public const string WS_REGISTRO = WS_SERVER + "/api/Account/Register";
-        public const string WS_PRODUTOS = WS_SERVER + "/api/produtos";
+        public const string WS_PRODUTOS = WS_SERVER + "produtos";
         public const string WS_EVENTOS = WS_SERVER + "/api/eventos";
         public const string WS_VENDAS = WS_SERVER + "vendas";
         public const string WS_FICHAS = WS_SERVER + "/api/fichas";

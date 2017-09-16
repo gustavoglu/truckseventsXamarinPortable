@@ -31,7 +31,7 @@ namespace truckeventsXamPL.ViewModels
 
         public double TotalVenda
         {
-            get { return _venda.TotalVenda.Value; }
+            get { return _venda.Total.Value; }
             set { totalVenda = value; Notify(nameof(TotalVenda)); }
         }
 

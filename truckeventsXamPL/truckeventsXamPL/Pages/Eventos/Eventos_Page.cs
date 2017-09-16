@@ -65,7 +65,7 @@ namespace truckeventsXamPL.Pages.Eventos
         private async void GetTotalVendas()
         {
             string uri = $"{Constantes.WS_VENDAS}/Total/Loja/{Constantes.Token.Id_usuario}/Evento/{_evento.Id}";
-            var result = await WSOpen.Get(uri);
+            var result = await WSOpen.Get<double>(uri);
             if (result.GetType() == typeof(string)) { await DisplayAlert("Erro", (string)result, "Ok"); }
             double total = 0;
             if (double.TryParse(result.ToString(), out total)) l_totalVendas.Text = total.ToString("#.##");//total.ToString(); 

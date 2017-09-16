@@ -48,7 +48,7 @@ namespace truckeventsXamPL.Pages.Vendas
             listV_produtos.ItemTemplate = new DataTemplate(typeof(VCell_Venda_Produto));
 
 
-            sl_hori_total = new StackLayout() { Padding = 5, BackgroundColor = Color.ForestGreen, Orientation = StackOrientation.Horizontal, Children = {  l_total } };
+            sl_hori_total = new StackLayout() { Padding = 5, BackgroundColor = Color.ForestGreen, Orientation = StackOrientation.Horizontal, Children = { l_total } };
 
             toolbar_finalizar = new ToolbarItem("Finalizar", "", Finalizar, ToolbarItemOrder.Default);
             toolbar_cancelar = new ToolbarItem("Cancelar", "", Cancelar, ToolbarItemOrder.Default);
@@ -66,7 +66,7 @@ namespace truckeventsXamPL.Pages.Vendas
             this.ToolbarItems.Add(toolbar_finalizar);
             this.Content = sl_principal;
 
-            populaProdutos();
+            PopulaProdutos();
         }
 
         private async void Cancelar()
@@ -82,7 +82,7 @@ namespace truckeventsXamPL.Pages.Vendas
         private void Finalizar()
         {
             double totalvenda = double.Parse(l_total.Text.Replace("Total R$ ", ""));
-            _venda.TotalVenda = totalvenda;
+            _venda.Total = totalvenda;
 
             var produtosEscolhidos = ProdutosVendaViewModel.Where(vm => vm.Quantidade > 0);
 
@@ -90,34 +90,25 @@ namespace truckeventsXamPL.Pages.Vendas
 
             foreach (var produtovendaviewmodel in produtosEscolhidos)
             {
-                venda_produtos.Add(new Venda_Produto() { Id_Venda = _venda.Id, Produto = produtovendaviewmodel._produto, Id_produto = produtovendaviewmodel.Id_produto, Quantidade = produtovendaviewmodel.Quantidade, Total = produtovendaviewmodel.Total });
+                venda_produtos.Add(new Venda_Produto()
+                {
+                    Id_venda = _venda.Id.Value,
+                    Id_produto = produtovendaviewmodel.Id_produto,
+                    Quantidade = produtovendaviewmodel.Quantidade,
+                    ValorTotal = produtovendaviewmodel.Total
+                });
             }
 
-            //if (ValidacaoFinalizacaoVenda(_venda))
-            //{
             _venda.Venda_Produtos = venda_produtos;
             App.Nav.Navigation.PushAsync(new Resumo_Venda_Page(_venda, _evento));
-            //}
-            //else
-            //{
-            //    Utilidades.DialogMessage(Constantes.ERRO_VENDASEMPRODUTOS);
-            //}
 
 
         }
 
         private bool ValidacaoFinalizacaoVenda(Venda venda)
         {
-            var totalVenda = venda.TotalVenda;
-            var countVenda_Produtos = venda.Venda_Produtos == null ? 0 : venda.Venda_Produtos.Count;
-            if (totalVenda > 0 && countVenda_Produtos > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            if (venda.Venda_Produtos == null || !venda.Venda_Produtos.Any()) return false;
+            return true;
         }
 
         private void ListV_produtos_ItemTapped(object sender, ItemTappedEventArgs e)
@@ -137,24 +128,23 @@ namespace truckeventsXamPL.Pages.Vendas
             CalculaTotais();
         }
 
-        private async void populaProdutos()
+        private async void PopulaProdutos()
         {
-            List<Produto> produtos = null;
+            object result = null;
 
             loading.Enable(this);
 
             await Task.Factory.StartNew(async () =>
             {
-               // produtos = await WSOpen.Get<List<Produto>>(Constantes.WS_PRODUTOS);
+                result = await WSOpen.Get<List<Produto>>(Constantes.WS_PRODUTOS);
             });
 
-            if (produtos != null && produtos.Count > 0)
-            {
-                foreach (var produto in produtos)
-                {
-                    ProdutosVendaViewModel.Add(new ProdutoVendaViewModel(produto));
-                }
-            }
+            if (result.GetType() == typeof(string)) { await DisplayAlert("Erro", (string)result, "Ok"); return; }
+
+            var produtos = result as List<Produto>;
+
+            if (produtos != null && produtos.Any())
+                foreach (var produto in produtos) ProdutosVendaViewModel.Add(new ProdutoVendaViewModel(produto));
 
             loading.Disable(this, sl_principal);
         }

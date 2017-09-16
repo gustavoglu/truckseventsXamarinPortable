@@ -44,12 +44,16 @@
     </Compile>
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\Consequencia.cs" />
+    <Compile Include="Models\Cor.cs" />
     <Compile Include="Models\Enums\ContaTipo.cs" />
+    <Compile Include="Models\Enums\ProdutoTipo.cs" />
     <Compile Include="Models\Evento.cs" />
     <Compile Include="Models\Evento_Usuario.cs" />
     <Compile Include="Models\Ficha.cs" />
     <Compile Include="Models\Ficha_Produto.cs" />
     <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\Pagamento.cs" />
+    <Compile Include="Models\Pagamento_Ficha.cs" />
     <Compile Include="Models\Pagamento_Tipo.cs" />
     <Compile Include="Models\Produto.cs" />
     <Compile Include="Models\Produto_Cor.cs" />
