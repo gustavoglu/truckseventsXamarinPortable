@@ -3,12 +3,15 @@ using System.Collections.Generic;
 
 namespace truckeventsXamPL.Models
 {
-    public class Venda : BaseEntity
+    public class Venda
     {
         public Venda()
         {
+            this.Id = Guid.NewGuid();
             Venda_Produtos = new List<Venda_Produto>();
         }
+
+        public Guid Id { get; set; }
 
         public DateTime Data { get; set; }
 

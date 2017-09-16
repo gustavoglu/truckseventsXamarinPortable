@@ -7,8 +7,6 @@ using Xamarin.Forms;
 
 namespace truckeventsXamPL.Pages.Eventos
 {
-
-
     public class Evento_Vendas_Page : ContentPage
     {
         #region Layout

@@ -58,6 +58,8 @@ namespace truckeventsXamPL.WS
 
                 var objDes = JsonConvert.DeserializeObject<T>(obj);
 
+                if (objDes == null) return default(T);
+
                 return objDes;
             }
             catch (Exception e)

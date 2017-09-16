@@ -24,7 +24,7 @@ namespace truckeventsXamPL.ViewModels
 
         public string Cliente
         {
-            get { return _pagamento_Ficha.Ficha.NomeCliente; }
+            get { return _pagamento_Ficha.Ficha.NomeCliente == string.Empty || _pagamento_Ficha.Ficha.NomeCliente == null ? "Não Informado" : _pagamento_Ficha.Ficha.NomeCliente; }
             set { cliente = value; Notify(nameof(this.Cliente)); }
         }
 

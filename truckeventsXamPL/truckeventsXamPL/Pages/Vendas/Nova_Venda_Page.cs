@@ -86,22 +86,19 @@ namespace truckeventsXamPL.Pages.Vendas
 
             var produtosEscolhidos = ProdutosVendaViewModel.Where(vm => vm.Quantidade > 0);
 
-            List<Venda_Produto> venda_produtos = new List<Venda_Produto>();
+            var venda_produtos = from produtoViewModel in produtosEscolhidos
+                                 select new Venda_Produto
+                                 {  
+                                     Produto = produtoViewModel.Produto,
+                                     Id_produto = produtoViewModel.Produto.Id.Value,
+                                     Quantidade = produtoViewModel.Quantidade,
+                                     ValorTotal = produtoViewModel.Total,
+                                     Id_venda = _venda.Id
+                                 };
 
-            foreach (var produtovendaviewmodel in produtosEscolhidos)
-            {
-                venda_produtos.Add(new Venda_Produto()
-                {
-                    Id_venda = _venda.Id.Value,
-                    Id_produto = produtovendaviewmodel.Id_produto,
-                    Quantidade = produtovendaviewmodel.Quantidade,
-                    ValorTotal = produtovendaviewmodel.Total
-                });
-            }
+            _venda.Venda_Produtos = venda_produtos.ToList();
 
-            _venda.Venda_Produtos = venda_produtos;
             App.Nav.Navigation.PushAsync(new Resumo_Venda_Page(_venda, _evento));
-
 
         }
 

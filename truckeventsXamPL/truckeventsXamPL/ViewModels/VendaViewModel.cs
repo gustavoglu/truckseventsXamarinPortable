@@ -23,7 +23,7 @@ namespace truckeventsXamPL.ViewModels
 
         public string Data
         {
-            get { return string.Format("{1} as {0}",_venda.CriadoEm.Value.ToLocalTime().ToString(@"hh\:mm").ToString(),_venda.CriadoEm.Value.Date.ToString("dd/MM")); }
+            get { return string.Format("{1} as {0}",_venda.Data.ToLocalTime().ToString(@"hh\:mm").ToString(),_venda.Data.Date.ToString("dd/MM")); }
             set { Data = value; Notify(nameof(Data)); }
         }
 

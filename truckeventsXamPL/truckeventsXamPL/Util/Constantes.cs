@@ -32,7 +32,7 @@ namespace truckeventsXamPL.Util
         public const string WS_PRODUTOS = WS_SERVER + "produtos";
         public const string WS_EVENTOS = WS_SERVER + "/api/eventos";
         public const string WS_VENDAS = WS_SERVER + "vendas";
-        public const string WS_FICHAS = WS_SERVER + "/api/fichas";
+        public const string WS_FICHAS = WS_SERVER + "fichas";
         public const string WS_VENDAS_EVENTO = WS_SERVER + "/api/vendas/evento";
 
         #endregion
