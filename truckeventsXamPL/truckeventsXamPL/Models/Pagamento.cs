@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace truckeventsXamPL.Models
 {
-    public class Pagamento : BaseEntity
+    public class Pagamento
     {
+        public Guid Id { get; set; }
+
         public double? Total { get; set; } = 0;
 
         public bool? Cancelado { get; set; } = false;

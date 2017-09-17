@@ -113,7 +113,7 @@ namespace truckeventsXamPL.Pages.Vendas
                 return;
             }
 
-            fichasValor.Add(new FichaValorViewModel(new Pagamento_Ficha { Id_ficha = ficha.Id.Value, Ficha = ficha }));
+            fichasValor.Add(new FichaValorViewModel(new Pagamento_Ficha {Id_pagamento = _venda.Id,Id_ficha = ficha.Id.Value, Ficha = ficha }));
         }
 
         private void Cancelar()
@@ -123,7 +123,7 @@ namespace truckeventsXamPL.Pages.Vendas
 
         private async void Confirmar()
         {
-            _venda.Pagamento = new Pagamento { Pagamento_Fichas = fichasValor.Select(f => f.Pagamento_Ficha).ToList() };
+            _venda.Pagamento = new Pagamento {Id = _venda.Id, Pagamento_Fichas = fichasValor.Select(f => f.Pagamento_Ficha).ToList() };
             _venda.Id_loja = Guid.Parse(Constantes.Token.Id_usuario);
             _venda.Data = DateTime.Now;
 

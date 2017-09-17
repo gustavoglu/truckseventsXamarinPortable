@@ -2,7 +2,7 @@
 
 namespace truckeventsXamPL.Models
 {
-    public class Venda_Produto : BaseEntity
+    public class Venda_Produto
     {
         public Guid Id_venda { get; set; }
 
